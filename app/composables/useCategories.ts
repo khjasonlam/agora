@@ -1,9 +1,9 @@
 import type { Category, ApiResponse } from '~/types'
 
 export const useCategories = () => {
-  const { data, status, refresh } = useFetch<ApiResponse<Category[]>>('/api/categories')
+  const { data, status, error, refresh } = useFetch<ApiResponse<Category[]>>('/api/categories')
 
   const categories = computed(() => data.value?.data ?? [])
 
-  return { categories, status, refresh }
+  return { categories, status, error, refresh }
 }

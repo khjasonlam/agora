@@ -5,7 +5,7 @@ definePageMeta({ middleware: 'admin' })
 
 const notify = useNotificationStore()
 
-const { data: categoriesData, refresh } = await useFetch<ApiResponse<Category[]>>('/api/categories')
+const { data: categoriesData, status, error, refresh } = await useFetch<ApiResponse<Category[]>>('/api/categories')
 const categories = computed(() => categoriesData.value?.data ?? [])
 
 const formOpen = ref(false)
@@ -65,7 +65,9 @@ const confirmDelete = async () => {
       </UButton>
     </div>
 
-    <UCard>
+    <SharedLoadingSpinner v-if="status === 'pending'" text="カテゴリを読み込み中..." />
+    <SharedErrorState v-else-if="error" message="カテゴリ一覧の取得に失敗しました。" @retry="refresh()" />
+    <UCard v-else>
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>

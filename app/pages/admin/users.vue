@@ -4,7 +4,7 @@ import type { Profile, ApiResponse } from '~/types'
 definePageMeta({ middleware: 'admin' })
 
 const notify = useNotificationStore()
-const { data: usersData, refresh } = await useFetch<ApiResponse<Profile[]>>('/api/admin/users')
+const { data: usersData, status, error, refresh } = await useFetch<ApiResponse<Profile[]>>('/api/admin/users')
 const users = computed(() => usersData.value?.data ?? [])
 
 const formOpen = ref(false)
@@ -64,7 +64,9 @@ const confirmDelete = async () => {
       </UButton>
     </div>
 
-    <UCard>
+    <SharedLoadingSpinner v-if="status === 'pending'" text="ユーザーを読み込み中..." />
+    <SharedErrorState v-else-if="error" message="ユーザー一覧の取得に失敗しました。" @retry="refresh()" />
+    <UCard v-else>
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
