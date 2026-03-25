@@ -5,14 +5,19 @@ defineProps<{ threads: Thread[] }>()
 </script>
 
 <template>
-  <div class="space-y-4">
-    <ThreadItem
-      v-for="thread in threads"
-      :key="thread.id"
-      :thread="thread"
+  <div>
+    <div v-if="threads.length > 0" class="space-y-0">
+      <ThreadItem
+        v-for="thread in threads"
+        :key="thread.id"
+        :thread="thread"
+      />
+    </div>
+    <SharedEmptyState
+      v-else
+      icon="i-heroicons-chat-bubble-bottom-center-text"
+      title="まだコメントがありません"
+      description="最初のコメントを投稿してみましょう。"
     />
-    <p v-if="threads.length === 0" class="text-muted text-center py-4">
-      まだコメントがありません
-    </p>
   </div>
 </template>

@@ -25,12 +25,20 @@ const submit = async () => {
 
 <template>
   <UCard>
-    <UForm :state="{ content }" class="space-y-3" @submit.prevent="submit">
-      <UFormField label="コメント" name="content">
-        <UTextarea v-model="content" placeholder="コメントを入力..." :rows="3" class="w-full" />
-      </UFormField>
-      <div class="flex justify-end">
-        <UButton type="submit" :loading="loading">
+    <template #header>
+      <p class="text-sm font-medium">コメントを投稿</p>
+    </template>
+    <UForm :state="{ content }" @submit.prevent="submit">
+      <UTextarea
+        v-model="content"
+        placeholder="コメントを入力..."
+        :rows="3"
+        autoresize
+        class="w-full"
+      />
+      <div class="flex items-center justify-between mt-3">
+        <p class="text-xs text-muted">Markdown は使用できません</p>
+        <UButton type="submit" :loading="loading" :disabled="!content.trim()">
           コメントする
         </UButton>
       </div>

@@ -33,13 +33,16 @@ const submit = async () => {
 
 <template>
   <UCard>
-    <UForm :state="{ title }" class="space-y-3" @submit.prevent="submit">
+    <template #header>
+      <p class="text-sm font-medium">新規投稿を作成</p>
+    </template>
+    <UForm :state="{ title }" @submit.prevent="submit">
       <UFormField label="タイトル" name="title">
         <UInput v-model="title" placeholder="投稿タイトルを入力..." class="w-full" />
       </UFormField>
-      <div class="flex gap-2 justify-end">
+      <div class="flex gap-2 justify-end mt-4">
         <UButton color="neutral" variant="ghost" @click="emit('cancel')">キャンセル</UButton>
-        <UButton type="submit" :loading="loading">投稿する</UButton>
+        <UButton type="submit" :loading="loading" :disabled="!title.trim()">投稿する</UButton>
       </div>
     </UForm>
   </UCard>

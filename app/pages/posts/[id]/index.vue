@@ -16,6 +16,10 @@ const backLink = computed(() => {
   const catId = post.value?.category_id
   return catId ? `/categories/${catId}` : '/'
 })
+
+const backLabel = computed(() => {
+  return post.value?.categories?.name ?? 'カテゴリに戻る'
+})
 </script>
 
 <template>
@@ -24,17 +28,22 @@ const backLink = computed(() => {
     <SharedErrorState v-else-if="postError" message="投稿の取得に失敗しました。" @retry="refreshPost()" />
     <template v-else>
       <div v-if="post" class="mb-6">
-        <NuxtLink :to="backLink" class="text-sm text-muted hover:underline flex items-center gap-1 mb-4">
-          <UIcon name="i-heroicons-arrow-left" class="size-4" />
-          カテゴリに戻る
+        <NuxtLink :to="backLink" class="text-sm text-muted hover:underline inline-flex items-center gap-1 mb-4">
+          <UIcon name="i-heroicons-arrow-left" class="size-3.5" />
+          {{ backLabel }}
         </NuxtLink>
         <h1 class="text-2xl font-bold">{{ post.title }}</h1>
-        <p class="text-sm text-muted mt-1">
-          {{ formatRelativeDate(post.created_at) }} · {{ post.profiles?.name }}
-        </p>
+        <div class="flex items-center gap-2 mt-2 text-sm text-muted">
+          <div class="flex items-center justify-center size-6 rounded-full bg-primary/10 text-primary text-[10px] font-bold">
+            {{ post.profiles?.name?.charAt(0) ?? '?' }}
+          </div>
+          <span>{{ post.profiles?.name ?? '匿名' }}</span>
+          <span class="text-muted/40">·</span>
+          <span>{{ formatRelativeDate(post.created_at) }}</span>
+        </div>
       </div>
 
-      <USeparator class="my-4" />
+      <USeparator class="my-6" />
 
       <div
         v-if="connectionError"
@@ -55,6 +64,15 @@ const backLink = computed(() => {
       >
         <UIcon name="i-heroicons-arrow-path" class="size-4 animate-spin text-yellow-500" />
         <span>リアルタイム接続中...</span>
+      </div>
+
+      <div class="flex items-center gap-2 mb-4">
+        <h2 class="text-sm font-semibold text-muted uppercase tracking-wider">
+          コメント
+        </h2>
+        <UBadge v-if="allThreads.length > 0" variant="subtle" color="neutral" size="xs">
+          {{ allThreads.length }}
+        </UBadge>
       </div>
 
       <SharedLoadingSpinner v-if="threadsStatus === 'pending'" text="コメントを読み込み中..." />

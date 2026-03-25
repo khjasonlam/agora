@@ -7,8 +7,11 @@ defineProps<{ posts: Post[] }>()
 <template>
   <div class="space-y-3">
     <PostCard v-for="post in posts" :key="post.id" :post="post" />
-    <p v-if="posts.length === 0" class="text-muted text-center py-8">
-      まだ投稿がありません
-    </p>
+    <SharedEmptyState
+      v-if="posts.length === 0"
+      icon="i-heroicons-document-text"
+      title="まだ投稿がありません"
+      description="最初の投稿を作成してディスカッションを始めましょう。"
+    />
   </div>
 </template>

@@ -14,7 +14,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center">
+  <div class="min-h-screen flex flex-col items-center justify-center gap-4">
     <UIcon name="i-heroicons-arrow-path" class="size-8 animate-spin text-primary" />
+    <p class="text-sm text-muted">認証を確認中...</p>
   </div>
 </template>

@@ -6,16 +6,21 @@ defineProps<{ thread: Thread }>()
 
 <template>
   <div class="flex gap-3">
-    <div class="text-sm text-muted w-8 shrink-0 pt-1 text-right">
-      {{ thread.thread_number }}
-    </div>
-    <UCard class="flex-1">
-      <div class="flex items-center gap-2 mb-2">
-        <UIcon name="i-heroicons-user-circle" class="size-5 text-muted" />
-        <span class="text-sm font-medium">{{ thread.profiles?.name ?? '匿名' }}</span>
-        <span class="text-xs text-muted ml-auto">{{ formatRelativeDate(thread.created_at) }}</span>
+    <div class="flex flex-col items-center shrink-0">
+      <div class="flex items-center justify-center size-8 rounded-full bg-primary/10 text-primary text-xs font-bold">
+        {{ thread.profiles?.name?.charAt(0) ?? '?' }}
       </div>
-      <p class="text-sm whitespace-pre-wrap">{{ thread.content }}</p>
-    </UCard>
+      <div class="w-px flex-1 bg-default mt-2" />
+    </div>
+    <div class="flex-1 pb-6 min-w-0">
+      <div class="flex items-baseline gap-2 mb-1">
+        <span class="text-sm font-medium">{{ thread.profiles?.name ?? '匿名' }}</span>
+        <UBadge variant="subtle" color="neutral" size="xs">
+          #{{ thread.thread_number }}
+        </UBadge>
+        <span class="text-xs text-muted ml-auto shrink-0">{{ formatRelativeDate(thread.created_at) }}</span>
+      </div>
+      <p class="text-sm whitespace-pre-wrap leading-relaxed">{{ thread.content }}</p>
+    </div>
   </div>
 </template>

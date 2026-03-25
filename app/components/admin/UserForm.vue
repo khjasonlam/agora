@@ -90,7 +90,7 @@ const submit = async () => {
 </script>
 
 <template>
-  <UModal :open="open" @update:open="emit('update:open', $event)">
+  <UModal :open="open" :title="modalTitle" description="ユーザー情報を入力してください" @update:open="emit('update:open', $event)">
     <template #content>
       <UCard>
         <template #header>

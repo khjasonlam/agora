@@ -51,12 +51,10 @@ const confirmDelete = async () => {
 
 <template>
   <div class="p-6 max-w-4xl mx-auto">
-    <div class="flex items-center gap-2 mb-6">
-      <NuxtLink to="/admin" class="text-sm text-muted hover:underline flex items-center gap-1">
-        <UIcon name="i-heroicons-arrow-left" class="size-4" />
-        管理ダッシュボード
-      </NuxtLink>
-    </div>
+    <NuxtLink to="/admin" class="text-sm text-muted hover:underline inline-flex items-center gap-1 mb-4">
+      <UIcon name="i-heroicons-arrow-left" class="size-3.5" />
+      管理ダッシュボード
+    </NuxtLink>
 
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold">カテゴリ管理</h1>
@@ -79,9 +77,15 @@ const confirmDelete = async () => {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="cat in categories" :key="cat.id" class="border-b border-default last:border-b-0">
+            <tr
+              v-for="cat in categories"
+              :key="cat.id"
+              class="border-b border-default last:border-b-0 hover:bg-elevated/50 transition-colors"
+            >
               <td class="py-3 px-4">
-                <UIcon :name="cat.icon" class="size-5 text-primary" />
+                <div class="flex items-center justify-center size-8 rounded-lg bg-primary/10">
+                  <UIcon :name="cat.icon" class="size-4 text-primary" />
+                </div>
               </td>
               <td class="py-3 px-4 font-medium">{{ cat.name }}</td>
               <td class="py-3 px-4 text-muted">{{ formatRelativeDate(cat.created_at) }}</td>
@@ -111,9 +115,11 @@ const confirmDelete = async () => {
           </tbody>
         </table>
       </div>
-      <p v-if="categories.length === 0" class="text-center text-muted py-8">
-        カテゴリがありません
-      </p>
+      <SharedEmptyState
+        v-if="categories.length === 0"
+        icon="i-heroicons-tag"
+        title="カテゴリがありません"
+      />
     </UCard>
 
     <AdminCategoryForm

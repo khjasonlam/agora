@@ -33,6 +33,9 @@ const signInWithGoogle = async () => {
 
 <template>
   <UCard>
+    <template #header>
+      <h2 class="font-semibold text-center">ログイン</h2>
+    </template>
     <UForm :state="form" class="space-y-4" @submit.prevent="signIn">
       <UFormField label="メールアドレス" name="email">
         <UInput v-model="form.email" type="email" placeholder="your@email.com" class="w-full" />
@@ -45,16 +48,24 @@ const signInWithGoogle = async () => {
       </UButton>
     </UForm>
 
-    <USeparator label="または" class="my-4" />
+    <USeparator label="または" class="my-5" />
 
-    <UButton color="neutral" variant="outline" class="w-full" icon="i-simple-icons-google" @click="signInWithGoogle">
+    <UButton
+      color="neutral"
+      variant="outline"
+      class="w-full"
+      icon="i-simple-icons-google"
+      @click="signInWithGoogle"
+    >
       Google でログイン
     </UButton>
 
-    <div class="text-center mt-4">
-      <NuxtLink to="/recover" class="text-sm text-primary hover:underline">
-        パスワードをお忘れの方
-      </NuxtLink>
-    </div>
+    <template #footer>
+      <div class="text-center">
+        <NuxtLink to="/recover" class="text-sm text-primary hover:underline">
+          パスワードをお忘れの方
+        </NuxtLink>
+      </div>
+    </template>
   </UCard>
 </template>

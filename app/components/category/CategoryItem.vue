@@ -6,10 +6,12 @@ defineProps<{ category: Category }>()
 
 <template>
   <NuxtLink :to="`/categories/${category.id}`">
-    <UCard class="hover:shadow-md transition-shadow cursor-pointer">
+    <UCard class="hover:ring-primary/50 hover:ring-1 hover:shadow-md transition-all cursor-pointer h-full">
       <div class="flex items-center gap-3">
-        <UIcon :name="category.icon" class="size-6 text-primary" />
-        <span class="font-medium">{{ category.name }}</span>
+        <div class="flex items-center justify-center size-10 rounded-lg bg-primary/10 shrink-0">
+          <UIcon :name="category.icon" class="size-5 text-primary" />
+        </div>
+        <span class="font-medium text-sm">{{ category.name }}</span>
       </div>
     </UCard>
   </NuxtLink>

@@ -36,7 +36,13 @@ const submit = async () => {
 
 <template>
   <div class="p-6 max-w-md mx-auto">
+    <NuxtLink to="/" class="text-sm text-muted hover:underline inline-flex items-center gap-1 mb-4">
+      <UIcon name="i-heroicons-arrow-left" class="size-3.5" />
+      ホーム
+    </NuxtLink>
+
     <h1 class="text-2xl font-bold mb-6">パスワード変更</h1>
+
     <UCard>
       <UForm :state="form" class="space-y-4" @submit.prevent="submit">
         <UFormField label="現在のパスワード" name="currentPassword">

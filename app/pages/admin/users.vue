@@ -50,12 +50,10 @@ const confirmDelete = async () => {
 
 <template>
   <div class="p-6 max-w-4xl mx-auto">
-    <div class="flex items-center gap-2 mb-6">
-      <NuxtLink to="/admin" class="text-sm text-muted hover:underline flex items-center gap-1">
-        <UIcon name="i-heroicons-arrow-left" class="size-4" />
-        管理ダッシュボード
-      </NuxtLink>
-    </div>
+    <NuxtLink to="/admin" class="text-sm text-muted hover:underline inline-flex items-center gap-1 mb-4">
+      <UIcon name="i-heroicons-arrow-left" class="size-3.5" />
+      管理ダッシュボード
+    </NuxtLink>
 
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold">ユーザー管理</h1>
@@ -79,14 +77,20 @@ const confirmDelete = async () => {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="u in users" :key="u.id" class="border-b border-default last:border-b-0">
+            <tr
+              v-for="u in users"
+              :key="u.id"
+              class="border-b border-default last:border-b-0 hover:bg-elevated/50 transition-colors"
+            >
               <td class="py-3 px-4">
-                <div class="flex items-center gap-2">
-                  <UIcon name="i-heroicons-user-circle" class="size-5 text-muted" />
-                  {{ u.name }}
+                <div class="flex items-center gap-2.5">
+                  <div class="flex items-center justify-center size-7 rounded-full bg-primary/10 text-primary text-xs font-bold shrink-0">
+                    {{ u.name.charAt(0) }}
+                  </div>
+                  <span class="font-medium">{{ u.name }}</span>
                 </div>
               </td>
-              <td class="py-3 px-4 text-muted">{{ u.employee_id }}</td>
+              <td class="py-3 px-4 text-muted font-mono text-xs">{{ u.employee_id }}</td>
               <td class="py-3 px-4">
                 <UBadge :color="u.is_admin ? 'error' : 'neutral'" variant="subtle" size="sm">
                   {{ u.is_admin ? '管理者' : 'ユーザー' }}
@@ -120,9 +124,11 @@ const confirmDelete = async () => {
           </tbody>
         </table>
       </div>
-      <p v-if="users.length === 0" class="text-center text-muted py-8">
-        ユーザーが見つかりません
-      </p>
+      <SharedEmptyState
+        v-if="users.length === 0"
+        icon="i-heroicons-users"
+        title="ユーザーが見つかりません"
+      />
     </UCard>
 
     <AdminUserForm

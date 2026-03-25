@@ -12,7 +12,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <UModal :open="open" @update:open="emit('update:open', $event)">
+  <UModal :open="open" :title="title ?? '削除の確認'" :description="description ?? 'この操作は取り消せません。本当に削除しますか？'" @update:open="emit('update:open', $event)">
     <template #content>
       <UCard>
         <div class="space-y-4">

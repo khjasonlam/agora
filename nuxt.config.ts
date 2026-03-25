@@ -24,7 +24,9 @@ export default defineNuxtConfig({
         { rel: 'icon', href: '/favicon.ico' }
       ],
       title: 'agora'
-    }
+    },
+    pageTransition: { name: 'page', mode: 'out-in' },
+    layoutTransition: { name: 'layout', mode: 'out-in' }
   },
 
   css: ['~/assets/css/main.css'],
@@ -38,6 +40,20 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2025-01-15',
+
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('@supabase')) {
+              return 'supabase'
+            }
+          }
+        }
+      }
+    }
+  },
 
   eslint: {
     config: {

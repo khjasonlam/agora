@@ -9,23 +9,27 @@ const handleClearError = () => clearError({ redirect: '/' })
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center p-6">
+  <div class="min-h-screen flex items-center justify-center p-6 bg-default">
     <div class="text-center space-y-6 max-w-md">
-      <div class="mx-auto rounded-full bg-red-500/10 p-4 w-fit">
-        <UIcon name="i-heroicons-exclamation-triangle" class="size-10 text-red-500" />
-      </div>
+      <p class="text-8xl font-bold text-muted/20">{{ error.statusCode }}</p>
 
       <div class="space-y-2">
-        <h1 class="text-4xl font-bold">{{ error.statusCode }}</h1>
-        <p class="text-lg text-muted">
+        <h1 class="text-xl font-bold">
           {{ error.statusCode === 404 ? 'ページが見つかりません' : 'エラーが発生しました' }}
+        </h1>
+        <p class="text-sm text-muted">
+          {{
+            error.statusCode === 404
+              ? 'お探しのページは存在しないか、移動した可能性があります。'
+              : 'しばらくしてからもう一度お試しください。'
+          }}
         </p>
-        <p v-if="error.message && error.statusCode !== 404" class="text-sm text-muted">
+        <p v-if="error.message && error.statusCode !== 404" class="text-xs text-muted/60 font-mono">
           {{ error.message }}
         </p>
       </div>
 
-      <UButton icon="i-heroicons-home" size="lg" @click="handleClearError">
+      <UButton icon="i-heroicons-home" variant="outline" color="neutral" @click="handleClearError">
         ホームに戻る
       </UButton>
     </div>
