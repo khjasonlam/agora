@@ -6,6 +6,15 @@ export default defineVitestConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
+      include: [
+        'app/composables/**/*.ts',
+        'app/stores/**/*.ts',
+        'app/utils/**/*.ts'
+      ],
+      exclude: [
+        'app/types/**',
+        '**/*.d.ts'
+      ],
       thresholds: {
         lines: 80,
         functions: 80,
