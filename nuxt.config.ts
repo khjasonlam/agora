@@ -1,12 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@nuxt/ui',
     '@nuxtjs/supabase',
     '@pinia/nuxt',
-    '@vercel/speed-insights',
-    '@vercel/analytics'
+    // Skip Vercel observability modules in test environment — they try to load
+    // external scripts that cause noise in the test runner output.
+    ...(!process.env.VITEST ? ['@vercel/speed-insights', '@vercel/analytics'] : [])
   ],
 
   devtools: {
