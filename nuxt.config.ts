@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     '@nuxtjs/supabase',
     '@pinia/nuxt',
     '@vercel/speed-insights'
+    '@vercel/analytics'
   ],
 
   devtools: {
