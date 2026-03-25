@@ -3,7 +3,7 @@ const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 const mobileMenuOpen = ref(false)
 
-async function signOut() {
+const signOut = async () => {
   await supabase.auth.signOut()
   await navigateTo('/login')
 }

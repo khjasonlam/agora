@@ -12,7 +12,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAdmin = computed(() => profile.value?.is_admin ?? false)
 
-  async function fetchProfile() {
+  const fetchProfile = async () => {
     const supabase = useSupabaseClient()
     const user = useSupabaseUser()
 
@@ -30,7 +30,7 @@ export const useAuthStore = defineStore('auth', () => {
     profile.value = data
   }
 
-  function clearProfile() {
+  const clearProfile = () => {
     profile.value = null
   }
 

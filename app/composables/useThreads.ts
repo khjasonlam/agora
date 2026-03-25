@@ -16,7 +16,7 @@ interface ThreadsResponse {
   error: string | null
 }
 
-export function useThreads(postId: number) {
+export const useThreads = (postId: number) => {
   const { data, status, refresh } = useApiFetch<ThreadsResponse>(`/api/threads?postId=${postId}`)
 
   const threads = computed(() => data.value?.data ?? [])

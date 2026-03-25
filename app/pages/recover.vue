@@ -7,7 +7,7 @@ const loading = ref(false)
 const sent = ref(false)
 const email = ref('')
 
-async function sendResetEmail() {
+const sendResetEmail = async () => {
   loading.value = true
   const { error } = await supabase.auth.resetPasswordForEmail(email.value, {
     redirectTo: `${useRequestURL().origin}/settings/password`

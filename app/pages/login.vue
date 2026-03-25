@@ -7,7 +7,7 @@ const loading = ref(false)
 
 const form = reactive({ email: '', password: '' })
 
-async function signIn() {
+const signIn = async () => {
   loading.value = true
   const { error } = await supabase.auth.signInWithPassword({
     email: form.email,
@@ -23,7 +23,7 @@ async function signIn() {
   await navigateTo('/')
 }
 
-async function signInWithGoogle() {
+const signInWithGoogle = async () => {
   await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: { redirectTo: `${useRequestURL().origin}/auth/callback` }

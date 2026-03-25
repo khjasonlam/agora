@@ -4,7 +4,7 @@ const notify = useNotificationStore()
 const loading = ref(false)
 const content = ref('')
 
-async function submit() {
+const submit = async () => {
   if (!content.value.trim()) return
 
   loading.value = true

@@ -12,7 +12,7 @@ interface CategoriesResponse {
   error: string | null
 }
 
-export function useCategories() {
+export const useCategories = () => {
   const { data, status, refresh } = useApiFetch<CategoriesResponse>('/api/categories')
 
   const categories = computed(() => data.value?.data ?? [])

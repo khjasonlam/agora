@@ -17,7 +17,7 @@ interface PostsResponse {
   error: string | null
 }
 
-export function usePosts(categoryId?: number | Ref<number>) {
+export const usePosts = (categoryId?: number | Ref<number>) => {
   const id = toValue(categoryId)
   const url = id ? `/api/posts?categoryId=${id}` : '/api/posts'
 

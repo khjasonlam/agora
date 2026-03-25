@@ -15,7 +15,7 @@ const { posts, refresh } = usePosts(categoryId)
 
 const showForm = ref(false)
 
-async function onPostCreated() {
+const onPostCreated = async () => {
   showForm.value = false
   await refresh()
 }

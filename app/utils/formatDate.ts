@@ -1,4 +1,4 @@
-export function formatDate(dateStr: string): string {
+export const formatDate = (dateStr: string): string => {
   const date = new Date(dateStr)
   return new Intl.DateTimeFormat('ja-JP', {
     year: 'numeric',
@@ -9,7 +9,7 @@ export function formatDate(dateStr: string): string {
   }).format(date)
 }
 
-export function formatRelativeDate(dateStr: string): string {
+export const formatRelativeDate = (dateStr: string): string => {
   const date = new Date(dateStr)
   const now = new Date()
   const diffMs = now.getTime() - date.getTime()

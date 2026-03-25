@@ -9,7 +9,7 @@ const notify = useNotificationStore()
 const loading = ref(false)
 const title = ref('')
 
-async function submit() {
+const submit = async () => {
   if (!title.value.trim()) return
 
   loading.value = true

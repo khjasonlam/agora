@@ -12,12 +12,12 @@ interface RealtimeThread {
   profiles: { name: string } | null
 }
 
-export function useRealtime(postId: number) {
+export const useRealtime = (postId: number) => {
   const supabase = useSupabaseClient()
   const newThreads = ref<RealtimeThread[]>([])
   let channel: RealtimeChannel | null = null
 
-  async function fetchProfile(userId: string): Promise<{ name: string } | null> {
+  const fetchProfile = async (userId: string): Promise<{ name: string } | null> => {
     const { data } = await supabase
       .from('profiles')
       .select('name')
@@ -26,7 +26,7 @@ export function useRealtime(postId: number) {
     return data
   }
 
-  function subscribe() {
+  const subscribe = () => {
     channel = supabase
       .channel(`threads:post_${postId}`)
       .on(
@@ -46,7 +46,7 @@ export function useRealtime(postId: number) {
       .subscribe()
   }
 
-  function unsubscribe() {
+  const unsubscribe = () => {
     if (channel) {
       supabase.removeChannel(channel)
       channel = null

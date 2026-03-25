@@ -4,7 +4,7 @@ const notify = useNotificationStore()
 const loading = ref(false)
 const form = reactive({ password: '', confirm: '' })
 
-async function submit() {
+const submit = async () => {
   if (form.password !== form.confirm) {
     notify.error('パスワードが一致しません')
     return
