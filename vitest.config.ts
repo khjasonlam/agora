@@ -8,6 +8,7 @@ process.env.SUPABASE_KEY = process.env.SUPABASE_KEY ?? 'placeholder-anon-key'
 export default defineVitestConfig({
   test: {
     environment: 'nuxt',
+    setupFiles: ['./tests/setup.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
