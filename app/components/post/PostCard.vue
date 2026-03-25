@@ -1,13 +1,7 @@
 <script setup lang="ts">
-defineProps<{
-  post: {
-    id: number
-    title: string
-    created_at: string
-    profiles: { name: string } | null
-    threads: { count: number }[]
-  }
-}>()
+import type { Post } from '~/types'
+
+defineProps<{ post: Post }>()
 </script>
 
 <template>

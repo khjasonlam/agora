@@ -1,21 +1,10 @@
 <script setup lang="ts">
-interface PostDetailResponse {
-  success: boolean
-  data: {
-    id: number
-    title: string
-    category_id: number
-    created_at: string
-    profiles: { name: string } | null
-    categories: { name: string; icon: string } | null
-  } | null
-  error: string | null
-}
+import type { Post, ApiResponse } from '~/types'
 
 const route = useRoute()
 const postId = Number(route.params.id)
 
-const { data: postData } = await useApiFetch<PostDetailResponse>(`/api/posts/${postId}`)
+const { data: postData } = await useFetch<ApiResponse<Post>>(`/api/posts/${postId}`)
 const post = computed(() => postData.value?.data)
 
 const { threads: initialThreads } = useThreads(postId)

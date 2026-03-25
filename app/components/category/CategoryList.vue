@@ -1,11 +1,7 @@
 <script setup lang="ts">
-defineProps<{
-  categories: {
-    id: number
-    name: string
-    icon: string
-  }[]
-}>()
+import type { Category } from '~/types'
+
+defineProps<{ categories: Category[] }>()
 </script>
 
 <template>

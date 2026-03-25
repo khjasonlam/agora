@@ -1,14 +1,10 @@
 <script setup lang="ts">
-interface CategoryResponse {
-  success: boolean
-  data: { id: number; name: string; icon: string } | null
-  error: string | null
-}
+import type { Category, ApiResponse } from '~/types'
 
 const route = useRoute()
 const categoryId = Number(route.params.id)
 
-const { data: categoryData } = await useApiFetch<CategoryResponse>(`/api/categories/${categoryId}`)
+const { data: categoryData } = await useFetch<ApiResponse<Category>>(`/api/categories/${categoryId}`)
 const category = computed(() => categoryData.value?.data)
 
 const { posts, refresh } = usePosts(categoryId)

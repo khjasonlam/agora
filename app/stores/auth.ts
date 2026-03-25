@@ -1,11 +1,5 @@
 import { defineStore } from 'pinia'
-
-interface Profile {
-  id: string
-  employee_id: string
-  name: string
-  is_admin: boolean
-}
+import type { Profile } from '~/types'
 
 export const useAuthStore = defineStore('auth', () => {
   const profile = ref<Profile | null>(null)

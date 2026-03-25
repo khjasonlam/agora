@@ -1,13 +1,7 @@
 <script setup lang="ts">
-defineProps<{
-  threads: {
-    id: number
-    thread_number: number
-    content: string
-    created_at: string
-    profiles: { name: string } | null
-  }[]
-}>()
+import type { Thread } from '~/types'
+
+defineProps<{ threads: Thread[] }>()
 </script>
 
 <template>

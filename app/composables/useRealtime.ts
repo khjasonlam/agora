@@ -1,20 +1,9 @@
 import type { RealtimeChannel } from '@supabase/supabase-js'
-
-interface RealtimeThread {
-  id: number
-  user_id: string
-  post_id: number
-  thread_number: number
-  content: string
-  is_deleted: boolean
-  created_at: string
-  updated_at: string
-  profiles: { name: string } | null
-}
+import type { Thread } from '~/types'
 
 export const useRealtime = (postId: number) => {
   const supabase = useSupabaseClient()
-  const newThreads = ref<RealtimeThread[]>([])
+  const newThreads = ref<Thread[]>([])
   let channel: RealtimeChannel | null = null
 
   const fetchProfile = async (userId: string): Promise<{ name: string } | null> => {
@@ -38,9 +27,19 @@ export const useRealtime = (postId: number) => {
           filter: `post_id=eq.${postId}`
         },
         async (payload) => {
-          const raw = payload.new as Omit<RealtimeThread, 'profiles'>
-          const profiles = await fetchProfile(raw.user_id)
-          newThreads.value.push({ ...raw, profiles })
+          const row = payload.new
+          const profiles = await fetchProfile(String(row.user_id))
+          newThreads.value.push({
+            id: Number(row.id),
+            user_id: String(row.user_id),
+            post_id: Number(row.post_id),
+            thread_number: Number(row.thread_number),
+            content: String(row.content),
+            is_deleted: Boolean(row.is_deleted),
+            created_at: String(row.created_at),
+            updated_at: String(row.updated_at),
+            profiles
+          })
         }
       )
       .subscribe()

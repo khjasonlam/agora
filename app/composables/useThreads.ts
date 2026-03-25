@@ -1,23 +1,7 @@
-interface Thread {
-  id: number
-  user_id: string
-  post_id: number
-  thread_number: number
-  content: string
-  is_deleted: boolean
-  created_at: string
-  updated_at: string
-  profiles: { name: string } | null
-}
-
-interface ThreadsResponse {
-  success: boolean
-  data: Thread[] | null
-  error: string | null
-}
+import type { Thread, ApiResponse } from '~/types'
 
 export const useThreads = (postId: number) => {
-  const { data, status, refresh } = useApiFetch<ThreadsResponse>(`/api/threads?postId=${postId}`)
+  const { data, status, refresh } = useFetch<ApiResponse<Thread[]>>(`/api/threads?postId=${postId}`)
 
   const threads = computed(() => data.value?.data ?? [])
 
