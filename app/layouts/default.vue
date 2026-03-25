@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
+const mobileMenuOpen = ref(false)
 
 async function signOut() {
   await supabase.auth.signOut()
@@ -36,12 +37,56 @@ async function signOut() {
 
     <div class="flex-1 flex flex-col min-w-0">
       <header class="lg:hidden flex items-center justify-between px-4 h-14 border-b border-default">
-        <NuxtLink to="/" class="text-lg font-bold text-primary">agora</NuxtLink>
+        <div class="flex items-center gap-2">
+          <UButton
+            icon="i-heroicons-bars-3"
+            color="neutral"
+            variant="ghost"
+            size="sm"
+            @click="mobileMenuOpen = true"
+          />
+          <NuxtLink to="/" class="text-lg font-bold text-primary">agora</NuxtLink>
+        </div>
         <UColorModeButton />
       </header>
       <main class="flex-1 overflow-y-auto">
         <slot />
       </main>
     </div>
+
+    <USlideover v-model:open="mobileMenuOpen" side="left" class="lg:hidden">
+      <template #content>
+        <div class="flex flex-col h-full">
+          <div class="p-4 border-b border-default flex items-center justify-between">
+            <NuxtLink to="/" class="text-xl font-bold text-primary" @click="mobileMenuOpen = false">agora</NuxtLink>
+            <UButton
+              icon="i-heroicons-x-mark"
+              color="neutral"
+              variant="ghost"
+              size="sm"
+              @click="mobileMenuOpen = false"
+            />
+          </div>
+          <nav class="flex-1 overflow-y-auto p-2" @click="mobileMenuOpen = false">
+            <LayoutAppSidebar />
+          </nav>
+          <div class="p-4 border-t border-default">
+            <div class="flex items-center gap-2 mb-2">
+              <UIcon name="i-heroicons-user-circle" class="size-5 text-muted" />
+              <span class="text-sm text-muted truncate">{{ user?.email }}</span>
+            </div>
+            <UButton
+              class="w-full"
+              color="neutral"
+              variant="ghost"
+              icon="i-heroicons-arrow-right-on-rectangle"
+              @click="signOut"
+            >
+              ログアウト
+            </UButton>
+          </div>
+        </div>
+      </template>
+    </USlideover>
   </div>
 </template>

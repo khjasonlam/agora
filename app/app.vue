@@ -1,22 +1,14 @@
-<script setup>
-useHead({
-  meta: [
-    { name: 'viewport', content: 'width=device-width, initial-scale=1' }
-  ],
-  link: [
-    { rel: 'icon', href: '/favicon.ico' }
-  ],
-  htmlAttrs: {
-    lang: 'ja'
-  }
-})
+<script setup lang="ts">
+const user = useSupabaseUser()
+const authStore = useAuthStore()
 
-useSeoMeta({
-  title: 'agora',
-  description: '社員匿名フォーラム',
-  ogTitle: 'agora',
-  ogDescription: '社員匿名フォーラム'
-})
+watch(() => user.value?.id, async (id) => {
+  if (id) {
+    await authStore.fetchProfile()
+  } else {
+    authStore.clearProfile()
+  }
+}, { immediate: true })
 </script>
 
 <template>

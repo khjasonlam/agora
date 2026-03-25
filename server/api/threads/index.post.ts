@@ -1,4 +1,4 @@
-import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseClient, serverSupabaseServiceRole } from '#supabase/server'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -7,8 +7,9 @@ const schema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-  const user = await serverSupabaseUser(event)
-  if (!user) throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
+  const client = await serverSupabaseClient(event)
+  const { data: { user } } = await client.auth.getUser()
+  if (!user?.id) throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
 
   const body = await readBody(event)
   const parsed = schema.safeParse(body)
@@ -16,11 +17,13 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: parsed.error.message })
   }
 
-  const supabase = await serverSupabaseClient(event)
+  const supabase = serverSupabaseServiceRole(event)
 
-  // thread_number を採番（PostgreSQL 関数使用）
   const { data: threadNumber } = await supabase
     .rpc('next_thread_number', { p_post_id: parsed.data.post_id })
+  if (threadNumber == null) {
+    throw createError({ statusCode: 500, statusMessage: 'Failed to allocate thread number' })
+  }
 
   const { data, error } = await supabase
     .from('threads')

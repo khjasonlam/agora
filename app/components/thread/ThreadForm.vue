@@ -8,24 +8,24 @@ async function submit() {
   if (!content.value.trim()) return
 
   loading.value = true
-  const { error } = await useFetch('/api/threads', {
-    method: 'POST',
-    body: { post_id: props.postId, content: content.value.trim() }
-  })
-  loading.value = false
-
-  if (error.value) {
+  try {
+    await $fetch('/api/threads', {
+      method: 'POST',
+      body: { post_id: props.postId, content: content.value.trim() }
+    })
+  } catch {
+    loading.value = false
     notify.error('コメントの投稿に失敗しました')
     return
   }
-
+  loading.value = false
   content.value = ''
 }
 </script>
 
 <template>
   <UCard>
-    <UForm :state="{ content }" class="space-y-3" @submit="submit">
+    <UForm :state="{ content }" class="space-y-3" @submit.prevent="submit">
       <UFormField label="コメント" name="content">
         <UTextarea v-model="content" placeholder="コメントを入力..." :rows="3" class="w-full" />
       </UFormField>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-const { data } = await useFetch('/api/categories')
-const categories = computed(() => data.value?.data ?? [])
+const { categories } = useCategories()
 const authStore = useAuthStore()
 </script>
 

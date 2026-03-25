@@ -16,7 +16,7 @@ export const useAuthStore = defineStore('auth', () => {
     const supabase = useSupabaseClient()
     const user = useSupabaseUser()
 
-    if (!user.value) {
+    if (!user.value?.id) {
       profile.value = null
       return
     }

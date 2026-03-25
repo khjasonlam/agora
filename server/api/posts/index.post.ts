@@ -1,4 +1,4 @@
-import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseClient, serverSupabaseServiceRole } from '#supabase/server'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -7,8 +7,9 @@ const schema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-  const user = await serverSupabaseUser(event)
-  if (!user) throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
+  const client = await serverSupabaseClient(event)
+  const { data: { user } } = await client.auth.getUser()
+  if (!user?.id) throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
 
   const body = await readBody(event)
   const parsed = schema.safeParse(body)
@@ -16,7 +17,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: parsed.error.message })
   }
 
-  const supabase = await serverSupabaseClient(event)
+  const supabase = serverSupabaseServiceRole(event)
   const { data, error } = await supabase
     .from('posts')
     .insert({ ...parsed.data, user_id: user.id })

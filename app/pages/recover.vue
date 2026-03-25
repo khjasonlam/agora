@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'auth' })
+definePageMeta({ layout: 'auth', middleware: 'guest' })
 
 const supabase = useSupabaseClient()
 const notify = useNotificationStore()
@@ -34,7 +34,7 @@ async function sendResetEmail() {
       </div>
     </template>
     <template v-else>
-      <UForm :state="{ email }" class="space-y-4" @submit="sendResetEmail">
+      <UForm :state="{ email }" class="space-y-4" @submit.prevent="sendResetEmail">
         <UFormField label="メールアドレス" name="email">
           <UInput v-model="email" type="email" placeholder="your@email.com" class="w-full" />
         </UFormField>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'auth' })
+definePageMeta({ layout: 'auth', middleware: 'guest' })
 
 const supabase = useSupabaseClient()
 const notify = useNotificationStore()
@@ -33,7 +33,7 @@ async function signInWithGoogle() {
 
 <template>
   <UCard>
-    <UForm :state="form" class="space-y-4" @submit="signIn">
+    <UForm :state="form" class="space-y-4" @submit.prevent="signIn">
       <UFormField label="メールアドレス" name="email">
         <UInput v-model="form.email" type="email" placeholder="your@email.com" class="w-full" />
       </UFormField>

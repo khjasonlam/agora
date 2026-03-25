@@ -1,12 +1,17 @@
 <script setup lang="ts">
+interface CategoryResponse {
+  success: boolean
+  data: { id: number; name: string; icon: string } | null
+  error: string | null
+}
+
 const route = useRoute()
 const categoryId = Number(route.params.id)
 
-const { data: categoryData } = await useFetch(`/api/categories/${categoryId}`)
-const { data: postsData, refresh } = await useFetch(`/api/posts?categoryId=${categoryId}`)
-
+const { data: categoryData } = await useApiFetch<CategoryResponse>(`/api/categories/${categoryId}`)
 const category = computed(() => categoryData.value?.data)
-const posts = computed(() => postsData.value?.data ?? [])
+
+const { posts, refresh } = usePosts(categoryId)
 
 const showForm = ref(false)
 
@@ -36,11 +41,6 @@ async function onPostCreated() {
       @cancel="showForm = false"
     />
 
-    <div class="space-y-3">
-      <PostCard v-for="post in posts" :key="post.id" :post="post" />
-      <p v-if="posts.length === 0" class="text-muted text-center py-8">
-        まだ投稿がありません
-      </p>
-    </div>
+    <PostList :posts="posts" />
   </div>
 </template>

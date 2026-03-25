@@ -29,7 +29,7 @@ async function submit() {
   <div class="p-6 max-w-md mx-auto">
     <h1 class="text-2xl font-bold mb-6">パスワード変更</h1>
     <UCard>
-      <UForm :state="form" class="space-y-4" @submit="submit">
+      <UForm :state="form" class="space-y-4" @submit.prevent="submit">
         <UFormField label="新しいパスワード" name="password">
           <UInput v-model="form.password" type="password" class="w-full" />
         </UFormField>

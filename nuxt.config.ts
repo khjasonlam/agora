@@ -11,6 +11,22 @@ export default defineNuxtConfig({
     enabled: true
   },
 
+  app: {
+    head: {
+      htmlAttrs: { lang: 'ja' },
+      meta: [
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'description', content: '匿名フォーラム' },
+        { property: 'og:title', content: 'agora' },
+        { property: 'og:description', content: '匿名フォーラム' }
+      ],
+      link: [
+        { rel: 'icon', href: '/favicon.ico' }
+      ],
+      title: 'agora'
+    }
+  },
+
   css: ['~/assets/css/main.css'],
 
   routeRules: {
