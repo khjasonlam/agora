@@ -1,60 +1,64 @@
-# Nuxt Starter Template
+# agora
 
-[![Nuxt UI](https://img.shields.io/badge/Made%20with-Nuxt%20UI-00DC82?logo=nuxt&labelColor=020420)](https://ui.nuxt.com)
+Anonymous employee forum built with Nuxt 4, Supabase, and Vercel.
 
-Use this template to get started with [Nuxt UI](https://ui.nuxt.com) quickly.
+## Tech Stack
 
-- [Live demo](https://starter-template.nuxt.dev/)
-- [Documentation](https://ui.nuxt.com/docs/getting-started/installation/nuxt)
-
-<a href="https://starter-template.nuxt.dev/" target="_blank">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png">
-    <img alt="Nuxt Starter Template" src="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png" width="830" height="466">
-  </picture>
-</a>
-
-> The starter template for Vue is on https://github.com/nuxt-ui-templates/starter-vue.
-
-## Quick Start
-
-```bash [Terminal]
-npm create nuxt@latest -- -t ui
-```
-
-## Deploy your own
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-name=starter&repository-url=https%3A%2F%2Fgithub.com%2Fnuxt-ui-templates%2Fstarter&demo-image=https%3A%2F%2Fui.nuxt.com%2Fassets%2Ftemplates%2Fnuxt%2Fstarter-dark.png&demo-url=https%3A%2F%2Fstarter-template.nuxt.dev%2F&demo-title=Nuxt%20Starter%20Template&demo-description=A%20minimal%20template%20to%20get%20started%20with%20Nuxt%20UI.)
+- **Nuxt 4** — SSR, API routes, file-based routing
+- **Supabase** — PostgreSQL, Auth, Row Level Security, Realtime
+- **Nuxt UI v3** — Component library (Tailwind CSS v4)
+- **Pinia** — State management
+- **Zod** — Schema validation
+- **Vitest + Playwright** — Unit and E2E testing
 
 ## Setup
-
-Make sure to install the dependencies:
 
 ```bash
 pnpm install
 ```
 
-## Development Server
+Copy `.env.example` to `.env` and fill in your Supabase credentials:
 
-Start the development server on `http://localhost:3000`:
+```bash
+cp .env.example .env
+```
+
+```
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your-anon-key
+SUPABASE_SERVICE_KEY=your-service-role-key
+```
+
+Run the Supabase migrations in order:
+
+```
+supabase/migrations/001_initial_schema.sql
+supabase/migrations/002_rls_policies.sql
+supabase/migrations/003_realtime.sql
+```
+
+## Development
 
 ```bash
 pnpm dev
 ```
 
-## Production
+## Scripts
 
-Build the application for production:
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start dev server |
+| `pnpm build` | Production build |
+| `pnpm preview` | Preview production build |
+| `pnpm lint` | Run ESLint |
+| `pnpm typecheck` | Run TypeScript checks |
+| `pnpm test` | Run unit tests |
+| `pnpm test:e2e` | Run E2E tests |
 
-```bash
-pnpm build
-```
+## Deployment
 
-Locally preview production build:
+Deployed to Vercel (Tokyo region). See `vercel.json` for config.
 
-```bash
-pnpm preview
-```
+## License
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+MIT
