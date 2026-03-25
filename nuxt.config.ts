@@ -29,23 +29,15 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  runtimeConfig: {
+    supabaseSecretKey: process.env.SUPABASE_SECRET_KEY
+  },
+
   routeRules: {
     '/': { prerender: false }
   },
 
   compatibilityDate: '2025-01-15',
-
-  runtimeConfig: {
-    supabaseSecretKey: process.env.SUPABASE_SECRET_KEY
-  },
-
-  supabase: {
-    redirectOptions: {
-      login: '/login',
-      callback: '/auth/callback',
-      exclude: ['/login', '/recover', '/auth/callback']
-    }
-  },
 
   eslint: {
     config: {
@@ -53,6 +45,14 @@ export default defineNuxtConfig({
         commaDangle: 'never',
         braceStyle: '1tbs'
       }
+    }
+  },
+
+  supabase: {
+    redirectOptions: {
+      login: '/login',
+      callback: '/auth/callback',
+      exclude: ['/login', '/recover', '/auth/callback']
     }
   }
 })
