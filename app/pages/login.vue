@@ -20,7 +20,7 @@ const signIn = async () => {
     return
   }
 
-  await navigateTo('/')
+  reloadNuxtApp({ path: '/' })
 }
 
 const signInWithGoogle = async () => {
