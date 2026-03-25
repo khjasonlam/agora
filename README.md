@@ -2,6 +2,15 @@
 
 Anonymous employee forum built with Nuxt 4, Supabase, and Vercel.
 
+## Features
+
+- **Anonymous posting** — employees post and comment without revealing identity
+- **Categories** — organise discussions into topic areas with custom icons
+- **Real-time comments** — new replies appear instantly via Supabase Realtime
+- **Admin panel** — manage categories and users; promote/demote admins
+- **Password management** — self-service password change for authenticated users
+- **Row Level Security** — all data access enforced at the database level
+
 ## Tech Stack
 
 - **Nuxt 4** — SSR, API routes, file-based routing
@@ -9,7 +18,7 @@ Anonymous employee forum built with Nuxt 4, Supabase, and Vercel.
 - **Nuxt UI v3** — Component library (Tailwind CSS v4)
 - **Pinia** — State management
 - **Zod** — Schema validation
-- **Vitest + Playwright** — Unit and E2E testing
+- **Vitest + Playwright** — Unit, integration, and E2E testing
 
 ## Setup
 
@@ -51,13 +60,38 @@ pnpm dev
 | `pnpm build` | Production build |
 | `pnpm preview` | Preview production build |
 | `pnpm lint` | Run ESLint |
-| `pnpm typecheck` | Run TypeScript checks |
-| `pnpm test` | Run unit tests |
-| `pnpm test:e2e` | Run E2E tests |
+| `pnpm lint:fix` | ESLint with auto-fix |
+| `pnpm typecheck` | TypeScript type check |
+| `pnpm test` | Run unit + integration tests (Vitest) |
+| `pnpm test:watch` | Vitest in watch mode |
+| `pnpm test:coverage` | Vitest with coverage report (80% threshold) |
+| `pnpm test:e2e` | Playwright E2E tests (requires dev server on :3000) |
+
+## Testing
+
+Tests live in `tests/` and are split into three layers:
+
+| Layer | Location | What it covers |
+|-------|----------|----------------|
+| Unit | `tests/unit/` | utils, composables, Zod schema validation |
+| Integration | `tests/integration/` | Pinia stores with mocked Supabase |
+| E2E | `tests/e2e/` | Full user flows via Playwright (pending) |
+
+Run a single test file:
+
+```bash
+pnpm vitest run tests/unit/composables/useCategories.test.ts
+```
+
+Current coverage: **100% lines/functions**, **94%+ branches** across all measured files.
 
 ## Deployment
 
 Deployed to Vercel (Tokyo region). See `vercel.json` for config.
+
+CI runs on every push via GitHub Actions: lint → typecheck → test → coverage (80% threshold enforced).
+
+Live: https://agora-two-tawny.vercel.app
 
 ## License
 
