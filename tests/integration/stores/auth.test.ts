@@ -109,7 +109,6 @@ describe('useAuthStore', () => {
     })
 
     it('sets profile to null on fetch error', async () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
       useSupabaseUserMock.mockReturnValue(ref({ sub: 'user-uuid-1' }))
       useSupabaseClientMock.mockReturnValue(createMockSupabaseClient(null, true))
 
@@ -117,7 +116,6 @@ describe('useAuthStore', () => {
       // Pre-set a profile to confirm it gets cleared
       store.profile = mockProfile
       await store.fetchProfile()
-      consoleSpy.mockRestore()
 
       expect(store.profile).toBeNull()
     })
