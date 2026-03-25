@@ -8,7 +8,7 @@ const { data: postData } = await useFetch<ApiResponse<Post>>(`/api/posts/${postI
 const post = computed(() => postData.value?.data)
 
 const { threads: initialThreads } = useThreads(postId)
-const { newThreads } = useRealtime(postId)
+const { newThreads, status: realtimeStatus, connectionError, reconnect } = useRealtime(postId)
 
 const allThreads = computed(() => [...initialThreads.value, ...newThreads.value])
 
@@ -32,6 +32,27 @@ const backLink = computed(() => {
     </div>
 
     <USeparator class="my-4" />
+
+    <div
+      v-if="connectionError"
+      class="mb-4 flex items-center justify-between gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm"
+    >
+      <div class="flex items-center gap-2">
+        <UIcon name="i-heroicons-exclamation-triangle" class="size-5 text-red-500 shrink-0" />
+        <span>{{ connectionError }}</span>
+      </div>
+      <UButton size="xs" variant="outline" color="error" @click="reconnect">
+        再接続
+      </UButton>
+    </div>
+
+    <div
+      v-else-if="realtimeStatus === 'connecting'"
+      class="mb-4 flex items-center gap-2 rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-sm"
+    >
+      <UIcon name="i-heroicons-arrow-path" class="size-4 animate-spin text-yellow-500" />
+      <span>リアルタイム接続中...</span>
+    </div>
 
     <ThreadList :threads="allThreads" class="mb-6" />
 
