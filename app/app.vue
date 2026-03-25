@@ -2,8 +2,8 @@
 const user = useSupabaseUser()
 const authStore = useAuthStore()
 
-watch(() => user.value?.id, async (id) => {
-  if (id) {
+watch(() => user.value?.sub, async (sub) => {
+  if (sub) {
     await authStore.fetchProfile()
   } else {
     authStore.clearProfile()

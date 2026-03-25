@@ -9,13 +9,13 @@ const form = reactive({ email: '', password: '' })
 
 const signIn = async () => {
   loading.value = true
-  const { error } = await supabase.auth.signInWithPassword({
+  const { error, data } = await supabase.auth.signInWithPassword({
     email: form.email,
     password: form.password
   })
   loading.value = false
 
-  if (error) {
+  if (error || !data.user) {
     notify.error('メールアドレスまたはパスワードが正しくありません')
     return
   }

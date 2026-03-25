@@ -1,26 +1,35 @@
 <script setup lang="ts">
-const supabase = useSupabaseClient()
 const notify = useNotificationStore()
 const loading = ref(false)
-const form = reactive({ password: '', confirm: '' })
+const form = reactive({ currentPassword: '', newPassword: '', confirm: '' })
 
 const submit = async () => {
-  if (form.password !== form.confirm) {
+  if (form.newPassword !== form.confirm) {
     notify.error('パスワードが一致しません')
     return
   }
 
   loading.value = true
-  const { error } = await supabase.auth.updateUser({ password: form.password })
-  loading.value = false
-
-  if (error) {
-    notify.error('パスワードの変更に失敗しました')
+  try {
+    await $fetch('/api/auth/change-password', {
+      method: 'PUT',
+      body: {
+        currentPassword: form.currentPassword,
+        newPassword: form.newPassword
+      }
+    })
+  } catch (err: unknown) {
+    loading.value = false
+    const message = err instanceof Error ? err.message : 'パスワードの変更に失敗しました'
+    const statusMessage = (err as { data?: { message?: string } })?.data?.message
+    notify.error(statusMessage ?? message)
     return
   }
+  loading.value = false
 
   notify.success('パスワードを変更しました')
-  form.password = ''
+  form.currentPassword = ''
+  form.newPassword = ''
   form.confirm = ''
 }
 </script>
@@ -30,8 +39,11 @@ const submit = async () => {
     <h1 class="text-2xl font-bold mb-6">パスワード変更</h1>
     <UCard>
       <UForm :state="form" class="space-y-4" @submit.prevent="submit">
-        <UFormField label="新しいパスワード" name="password">
-          <UInput v-model="form.password" type="password" class="w-full" />
+        <UFormField label="現在のパスワード" name="currentPassword">
+          <UInput v-model="form.currentPassword" type="password" class="w-full" />
+        </UFormField>
+        <UFormField label="新しいパスワード" name="newPassword">
+          <UInput v-model="form.newPassword" type="password" class="w-full" />
         </UFormField>
         <UFormField label="パスワード確認" name="confirm">
           <UInput v-model="form.confirm" type="password" class="w-full" />

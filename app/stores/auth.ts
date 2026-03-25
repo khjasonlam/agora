@@ -9,17 +9,24 @@ export const useAuthStore = defineStore('auth', () => {
   const fetchProfile = async () => {
     const supabase = useSupabaseClient()
     const user = useSupabaseUser()
+    const userId = user.value?.sub
 
-    if (!user.value?.id) {
+    if (!userId) {
       profile.value = null
       return
     }
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('profiles')
       .select('*')
-      .eq('id', user.value.id)
+      .eq('id', userId)
       .single()
+
+    if (error) {
+      console.error('[auth store] fetchProfile failed:', error.message)
+      profile.value = null
+      return
+    }
 
     profile.value = data
   }

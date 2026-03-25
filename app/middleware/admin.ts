@@ -1,18 +1,17 @@
 export default defineNuxtRouteMiddleware(async () => {
-  const supabase = useSupabaseClient()
   const user = useSupabaseUser()
 
-  if (!user.value) {
+  if (!user.value?.sub) {
     return navigateTo('/login')
   }
 
-  const { data } = await supabase
-    .from('profiles')
-    .select('is_admin')
-    .eq('id', user.value.id)
-    .single()
+  const authStore = useAuthStore()
 
-  if (!data?.is_admin) {
+  if (!authStore.profile) {
+    await authStore.fetchProfile()
+  }
+
+  if (!authStore.isAdmin) {
     throw createError({ statusCode: 403, statusMessage: 'Forbidden' })
   }
 })
