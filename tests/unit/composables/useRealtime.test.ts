@@ -227,7 +227,7 @@ describe('useRealtime', () => {
     // After 5 iterations reconnectAttempts = 5; the 6th trigger hits the >= MAX_RECONNECT_ATTEMPTS branch
     for (let i = 0; i < 5; i++) {
       mockClient._triggerSubscribe('CHANNEL_ERROR', new Error('error'))
-      await vi.runAllTimersAsync()
+      await vi.runOnlyPendingTimersAsync()
     }
     // 6th error: reconnectAttempts(5) >= MAX(5) → status = 'error'
     mockClient._triggerSubscribe('CHANNEL_ERROR', new Error('error'))
