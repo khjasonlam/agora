@@ -23,7 +23,7 @@ export default defineNuxtConfig({
         { property: 'og:description', content: '匿名フォーラム' }
       ],
       link: [
-        { rel: 'icon', href: '/favicon.ico' }
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
       ],
       title: 'agora'
     },
