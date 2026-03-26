@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { Post, ApiResponse } from '~/types'
-import type { Thread } from '~/types'
+import type { Post, ApiResponse, Thread } from '~/types'
 
 const route = useRoute()
 const postId = Number(route.params.id)
