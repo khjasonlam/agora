@@ -2,8 +2,11 @@
 const { categories } = useCategories()
 const authStore = useAuthStore()
 const route = useRoute()
+const activeCategoryId = useState<number | null>('activeCategoryId', () => null)
 
 const isActive = (path: string) => route.path === path
+const isCategoryActive = (catId: number) =>
+  route.path === `/categories/${catId}` || activeCategoryId.value === catId
 </script>
 
 <template>
@@ -29,7 +32,7 @@ const isActive = (path: string) => route.path === path
         :key="cat.id"
         :to="`/categories/${cat.id}`"
         class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors"
-        :class="isActive(`/categories/${cat.id}`) ? 'bg-primary/10 text-primary font-medium' : 'text-muted hover:bg-elevated hover:text-default'"
+        :class="isCategoryActive(cat.id) ? 'bg-primary/10 text-primary font-medium' : 'text-muted hover:bg-elevated hover:text-default'"
       >
         <UIcon :name="cat.icon" class="size-4" />
         <span class="truncate">{{ cat.name }}</span>

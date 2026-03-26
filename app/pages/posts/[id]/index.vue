@@ -21,6 +21,14 @@ const backLabel = computed(() => {
   return post.value?.categories?.name ?? 'カテゴリに戻る'
 })
 
+const activeCategoryId = useState<number | null>('activeCategoryId', () => null)
+watch(post, (p) => {
+  activeCategoryId.value = p?.category_id ?? null
+}, { immediate: true })
+onUnmounted(() => {
+  activeCategoryId.value = null
+})
+
 const scrollContainer = ref<HTMLElement | null>(null)
 
 const scrollToBottom = () => {
@@ -48,10 +56,14 @@ watch(() => newThreads.value.length, () => {
       <!-- Fixed header: post title + meta -->
       <div class="shrink-0 border-b border-default">
         <div class="px-6 py-4 max-w-3xl mx-auto">
-          <NuxtLink :to="backLink" class="text-sm text-muted hover:underline inline-flex items-center gap-1 mb-3">
-            <UIcon name="i-heroicons-arrow-left" class="size-3.5" />
-            {{ backLabel }}
-          </NuxtLink>
+          <UBreadcrumb
+            :items="[
+              { label: 'ホーム', to: '/', icon: 'i-heroicons-home' },
+              { label: backLabel, to: backLink },
+              { label: post?.title ?? '' }
+            ]"
+            class="mb-3"
+          />
           <div v-if="post">
             <h1 class="text-lg sm:text-xl font-bold line-clamp-2">{{ post.title }}</h1>
             <div class="flex items-center gap-2 mt-2 text-sm text-muted">
