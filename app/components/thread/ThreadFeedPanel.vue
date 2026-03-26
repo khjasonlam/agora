@@ -45,4 +45,3 @@ defineProps<{
     <ThreadList v-else :threads="allThreads" />
   </div>
 </template>
-
