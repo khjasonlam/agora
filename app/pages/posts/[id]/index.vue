@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Post, ApiResponse } from '~/types'
+import type { Post, ApiResponse, Thread } from '~/types'
 
 const route = useRoute()
 const postId = Number(route.params.id)
@@ -10,7 +10,7 @@ const post = computed(() => postData.value?.data ?? null)
 const { threads: initialThreads, status: threadsStatus, error: threadsError, refresh: refreshThreads } = useThreads(postId)
 const { newThreads, status: realtimeStatus, connectionError, reconnect } = useRealtime(postId)
 
-const allThreads = computed(() => [...initialThreads.value, ...newThreads.value])
+const allThreads = computed<Thread[]>(() => [...initialThreads.value, ...newThreads.value])
 
 const backLink = computed(() => {
   const catId = post.value?.category_id
@@ -40,35 +40,15 @@ const { scrollContainer } = useThreadAutoScroll({ realtimeStatus, newThreads })
 
       <!-- Scrollable threads body -->
       <div ref="scrollContainer" class="flex-1 overflow-y-auto">
-        <div class="px-6 py-4 max-w-3xl mx-auto">
-          <UAlert
-            v-if="connectionError"
-            color="error"
-            variant="subtle"
-            icon="i-heroicons-exclamation-triangle"
-            :description="connectionError"
-            class="mb-4"
-          >
-            <template #actions>
-              <UButton size="xs" variant="outline" color="error" @click="reconnect">
-                再接続
-              </UButton>
-            </template>
-          </UAlert>
-
-          <div class="flex items-center gap-2 mb-4">
-            <h2 class="text-sm font-semibold text-muted uppercase tracking-wider">
-              コメント
-            </h2>
-            <UBadge v-if="allThreads.length > 0" variant="subtle" color="neutral" size="xs">
-              {{ allThreads.length }}
-            </UBadge>
-          </div>
-
-          <SharedSkeletonThreadList v-if="threadsStatus === 'pending' || realtimeStatus === 'connecting'" />
-          <SharedErrorState v-else-if="threadsError" message="コメントの取得に失敗しました。" @retry="refreshThreads()" />
-          <ThreadList v-else :threads="allThreads" />
-        </div>
+        <ThreadFeedPanel
+          :all-threads="allThreads"
+          :threads-status="threadsStatus"
+          :threads-error="threadsError"
+          :realtime-status="realtimeStatus"
+          :connection-error="connectionError"
+          :on-refresh-threads="() => refreshThreads()"
+          :on-reconnect="reconnect"
+        />
       </div>
 
       <!-- Fixed footer: comment form -->
