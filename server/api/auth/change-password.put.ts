@@ -1,10 +1,5 @@
-import { z } from 'zod'
 import { serverSupabaseClient } from '#supabase/server'
-
-const schema = z.object({
-  currentPassword: z.string().min(1),
-  newPassword: z.string().min(6)
-})
+import { changePasswordSchema } from '../../validation/schemas'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
@@ -14,7 +9,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody(event)
-  const parsed = schema.safeParse(body)
+  const parsed = changePasswordSchema.safeParse(body)
   if (!parsed.success) {
     throw createError({ statusCode: 400, statusMessage: parsed.error.message })
   }

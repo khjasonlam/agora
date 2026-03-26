@@ -1,16 +1,11 @@
-import { z } from 'zod'
-
-const schema = z.object({
-  name: z.string().min(1).max(150).optional(),
-  icon: z.string().min(1).optional()
-})
+import { updateCategorySchema } from '../../validation/schemas'
 
 export default defineEventHandler(async (event) => {
   const { supabase } = await requireAdmin(event)
   const id = getRouterParam(event, 'id')
 
   const body = await readBody(event)
-  const parsed = schema.safeParse(body)
+  const parsed = updateCategorySchema.safeParse(body)
   if (!parsed.success) {
     throw createError({ statusCode: 400, statusMessage: parsed.error.message })
   }

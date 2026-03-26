@@ -1,10 +1,4 @@
-import { z } from 'zod'
-
-const schema = z.object({
-  name: z.string().min(1).max(20),
-  employeeId: z.string().min(1),
-  isAdmin: z.boolean()
-})
+import { updateUserSchema } from '../../../validation/schemas'
 
 export default defineEventHandler(async (event) => {
   const { supabase } = await requireAdmin(event)
@@ -15,7 +9,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody(event)
-  const parsed = schema.safeParse(body)
+  const parsed = updateUserSchema.safeParse(body)
   if (!parsed.success) {
     throw createError({ statusCode: 400, statusMessage: parsed.error.message })
   }
