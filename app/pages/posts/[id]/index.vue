@@ -99,7 +99,7 @@ watch(() => newThreads.value.length, () => {
             </UBadge>
           </div>
 
-          <SharedLoadingSpinner v-if="threadsStatus === 'pending'" text="コメントを読み込み中..." />
+          <SharedSkeletonThreadList v-if="threadsStatus === 'pending'" />
           <SharedErrorState v-else-if="threadsError" message="コメントの取得に失敗しました。" @retry="refreshThreads()" />
           <ThreadList v-else :threads="allThreads" />
         </div>

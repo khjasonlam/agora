@@ -53,7 +53,7 @@ const onPostCreated = async () => {
 
       <div class="flex-1 overflow-y-auto">
         <div class="px-6 py-4 max-w-4xl mx-auto">
-          <SharedLoadingSpinner v-if="postsStatus === 'pending'" text="投稿を読み込み中..." />
+          <SharedSkeletonPostList v-if="postsStatus === 'pending'" />
           <SharedErrorState v-else-if="postsError" message="投稿の取得に失敗しました。" @retry="refreshPosts()" />
           <PostList v-else :posts="posts" />
         </div>
