@@ -3,68 +3,31 @@ import type { Profile, ApiResponse } from '~/types'
 
 definePageMeta({ middleware: 'admin' })
 
-const notify = useNotificationStore()
 const { data: usersData, status, error, refresh } = await useFetch<ApiResponse<Profile[]>>('/api/admin/users')
 const users = computed(() => usersData.value?.data ?? [])
-
-const search = ref('')
-const page = ref(1)
-const PAGE_SIZE = 10
-
-watch(search, () => {
-  page.value = 1
+const {
+  PAGE_SIZE,
+  search,
+  page,
+  filtered,
+  paginated,
+  formOpen,
+  editTarget,
+  openCreateForm,
+  openEditForm,
+  deleteTarget,
+  deleteModalOpen,
+  deleteLoading,
+  openDeleteModal,
+  confirmDelete
+} = useAdminListPage<Profile>({
+  items: users,
+  filterBy: (user, keyword) => user.name.toLowerCase().includes(keyword) || user.employee_id.toLowerCase().includes(keyword),
+  deleteRequest: async user => $fetch(`/api/admin/users/${user.id}`, { method: 'DELETE' }),
+  deleteSuccessMessage: 'ユーザーを削除しました',
+  deleteErrorMessage: 'ユーザーの削除に失敗しました',
+  onDeleted: refresh
 })
-
-const filtered = computed(() =>
-  users.value.filter(u =>
-    u.name.toLowerCase().includes(search.value.toLowerCase())
-    || u.employee_id.toLowerCase().includes(search.value.toLowerCase())
-  )
-)
-
-const paginated = computed(() =>
-  filtered.value.slice((page.value - 1) * PAGE_SIZE, page.value * PAGE_SIZE)
-)
-
-const formOpen = ref(false)
-const editTarget = ref<Profile | null>(null)
-
-const openCreateForm = () => {
-  editTarget.value = null
-  formOpen.value = true
-}
-
-const openEditForm = (user: Profile) => {
-  editTarget.value = user
-  formOpen.value = true
-}
-
-const deleteTarget = ref<Profile | null>(null)
-const deleteModalOpen = ref(false)
-const deleteLoading = ref(false)
-
-const openDeleteModal = (user: Profile) => {
-  deleteTarget.value = user
-  deleteModalOpen.value = true
-}
-
-const confirmDelete = async () => {
-  if (!deleteTarget.value) return
-
-  deleteLoading.value = true
-  try {
-    await $fetch(`/api/admin/users/${deleteTarget.value.id}`, { method: 'DELETE' })
-  } catch {
-    deleteLoading.value = false
-    notify.error('ユーザーの削除に失敗しました')
-    return
-  }
-  deleteLoading.value = false
-  deleteModalOpen.value = false
-
-  notify.success('ユーザーを削除しました')
-  await refresh()
-}
 </script>
 
 <template>
