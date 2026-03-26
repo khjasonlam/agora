@@ -1,15 +1,10 @@
-import { z } from 'zod'
-
-const schema = z.object({
-  name: z.string().min(1).max(150),
-  icon: z.string().min(1).default('i-heroicons-folder')
-})
+import { createCategorySchema } from '../../validation/schemas'
 
 export default defineEventHandler(async (event) => {
   const { supabase } = await requireAdmin(event)
 
   const body = await readBody(event)
-  const parsed = schema.safeParse(body)
+  const parsed = createCategorySchema.safeParse(body)
   if (!parsed.success) {
     throw createError({ statusCode: 400, statusMessage: parsed.error.message })
   }

@@ -1,10 +1,5 @@
 import { serverSupabaseClient, serverSupabaseServiceRole } from '#supabase/server'
-import { z } from 'zod'
-
-const schema = z.object({
-  post_id: z.number().int().positive(),
-  content: z.string().min(1)
-})
+import { createThreadSchema } from '../../validation/schemas'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
@@ -12,7 +7,7 @@ export default defineEventHandler(async (event) => {
   if (!user?.id) throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
 
   const body = await readBody(event)
-  const parsed = schema.safeParse(body)
+  const parsed = createThreadSchema.safeParse(body)
   if (!parsed.success) {
     throw createError({ statusCode: 400, statusMessage: parsed.error.message })
   }

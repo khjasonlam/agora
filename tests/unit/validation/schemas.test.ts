@@ -1,46 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import { z } from 'zod'
-
-// ─── Schema definitions (mirrors server/api/ route schemas) ───────────────────
-
-const createCategorySchema = z.object({
-  name: z.string().min(1).max(150),
-  icon: z.string().min(1).default('i-heroicons-folder')
-})
-
-const updateCategorySchema = z.object({
-  name: z.string().min(1).max(150).optional(),
-  icon: z.string().min(1).optional()
-})
-
-const createPostSchema = z.object({
-  category_id: z.number().int().positive(),
-  title: z.string().min(1).max(255)
-})
-
-const createThreadSchema = z.object({
-  post_id: z.number().int().positive(),
-  content: z.string().min(1)
-})
-
-const changePasswordSchema = z.object({
-  currentPassword: z.string().min(1),
-  newPassword: z.string().min(6)
-})
-
-const createUserSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-  name: z.string().min(1).max(20),
-  employeeId: z.string().min(1),
-  isAdmin: z.boolean().default(false)
-})
-
-const updateUserSchema = z.object({
-  name: z.string().min(1).max(20),
-  employeeId: z.string().min(1),
-  isAdmin: z.boolean()
-})
+import {
+  changePasswordSchema,
+  createCategorySchema,
+  createPostSchema,
+  createThreadSchema,
+  createUserSchema,
+  updateCategorySchema,
+  updateUserSchema
+} from '../../../server/validation/schemas'
 
 // ─── Category schemas ────────────────────────────────────────────────────────
 
