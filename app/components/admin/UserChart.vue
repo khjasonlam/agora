@@ -72,8 +72,8 @@ const chartOptions = computed(() => ({
     },
     tooltip: {
       callbacks: {
-        label: (item: { dataset: { label: string }, raw: unknown }) =>
-          ` ${item.dataset.label}: ${item.raw}`
+        label: (item: { dataset: { label?: string }, raw: unknown }) =>
+          ` ${item.dataset.label ?? ''}: ${item.raw}`
       }
     }
   },
