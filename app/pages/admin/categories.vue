@@ -2,69 +2,31 @@
 import type { Category, ApiResponse } from '~/types'
 
 definePageMeta({ middleware: 'admin' })
-
-const notify = useNotificationStore()
-
 const { data: categoriesData, status, error, refresh } = await useFetch<ApiResponse<Category[]>>('/api/categories')
 const categories = computed(() => categoriesData.value?.data ?? [])
-
-const search = ref('')
-const page = ref(1)
-const PAGE_SIZE = 10
-
-watch(search, () => {
-  page.value = 1
+const {
+  PAGE_SIZE,
+  search,
+  page,
+  filtered,
+  paginated,
+  formOpen,
+  editTarget,
+  openCreateForm,
+  openEditForm,
+  deleteTarget,
+  deleteModalOpen,
+  deleteLoading,
+  openDeleteModal,
+  confirmDelete
+} = useAdminListPage<Category>({
+  items: categories,
+  filterBy: (category, keyword) => category.name.toLowerCase().includes(keyword),
+  deleteRequest: async (category) => $fetch(`/api/categories/${category.id}`, { method: 'DELETE' }),
+  deleteSuccessMessage: 'カテゴリを削除しました',
+  deleteErrorMessage: 'カテゴリの削除に失敗しました',
+  onDeleted: refresh
 })
-
-const filtered = computed(() =>
-  categories.value.filter(c =>
-    c.name.toLowerCase().includes(search.value.toLowerCase())
-  )
-)
-
-const paginated = computed(() =>
-  filtered.value.slice((page.value - 1) * PAGE_SIZE, page.value * PAGE_SIZE)
-)
-
-const formOpen = ref(false)
-const editTarget = ref<Category | null>(null)
-
-const openCreateForm = () => {
-  editTarget.value = null
-  formOpen.value = true
-}
-
-const openEditForm = (cat: Category) => {
-  editTarget.value = cat
-  formOpen.value = true
-}
-
-const deleteTarget = ref<Category | null>(null)
-const deleteModalOpen = ref(false)
-const deleteLoading = ref(false)
-
-const openDeleteModal = (cat: Category) => {
-  deleteTarget.value = cat
-  deleteModalOpen.value = true
-}
-
-const confirmDelete = async () => {
-  if (!deleteTarget.value) return
-
-  deleteLoading.value = true
-  try {
-    await $fetch(`/api/categories/${deleteTarget.value.id}`, { method: 'DELETE' })
-  } catch {
-    deleteLoading.value = false
-    notify.error('カテゴリの削除に失敗しました')
-    return
-  }
-  deleteLoading.value = false
-  deleteModalOpen.value = false
-
-  notify.success('カテゴリを削除しました')
-  await refresh()
-}
 </script>
 
 <template>
