@@ -2,6 +2,7 @@
 import type { Post } from '~/types'
 
 defineProps<{ posts: Post[] }>()
+const emit = defineEmits<{ 'new-post': [] }>()
 </script>
 
 <template>
@@ -12,6 +13,10 @@ defineProps<{ posts: Post[] }>()
       icon="i-heroicons-document-text"
       title="まだ投稿がありません"
       description="最初の投稿を作成してディスカッションを始めましょう。"
-    />
+    >
+      <UButton icon="i-heroicons-plus" size="sm" @click="emit('new-post')">
+        最初の投稿を作成
+      </UButton>
+    </SharedEmptyState>
   </div>
 </template>

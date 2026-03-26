@@ -36,8 +36,8 @@ const submit = async () => {
         autoresize
         class="w-full"
       />
-      <div class="flex items-center justify-between mt-3">
-        <p class="text-xs text-muted">Markdown は使用できません</p>
+      <div class="flex items-center justify-end gap-2 mt-3">
+        <p class="text-xs text-muted mr-auto">Markdown は使用できません</p>
         <UButton type="submit" :loading="loading" :disabled="!content.trim()">
           コメントする
         </UButton>

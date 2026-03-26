@@ -18,40 +18,49 @@ const onPostCreated = async () => {
 </script>
 
 <template>
-  <div class="p-6 max-w-4xl mx-auto">
+  <div class="h-full flex flex-col">
     <SharedLoadingSpinner v-if="categoryStatus === 'pending'" text="カテゴリを読み込み中..." />
     <SharedErrorState v-else-if="categoryError" message="カテゴリの取得に失敗しました。" @retry="refreshCategory()" />
     <template v-else>
-      <NuxtLink to="/" class="text-sm text-muted hover:underline inline-flex items-center gap-1 mb-4">
-        <UIcon name="i-heroicons-arrow-left" class="size-3.5" />
-        ホーム
-      </NuxtLink>
+      <div class="shrink-0 border-b border-default">
+        <div class="px-6 py-4 max-w-4xl mx-auto">
+          <UBreadcrumb
+            :items="[
+              { label: 'ホーム', to: '/', icon: 'i-heroicons-home' },
+              { label: category?.name ?? '' }
+            ]"
+            class="mb-4"
+          />
 
-      <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-3">
-          <div v-if="category" class="flex items-center justify-center size-10 rounded-lg bg-primary/10 shrink-0">
-            <UIcon :name="category.icon" class="size-5 text-primary" />
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div v-if="category" class="flex items-center justify-center size-10 rounded-lg bg-primary/10 shrink-0">
+                <UIcon :name="category.icon" class="size-5 text-primary" />
+              </div>
+              <h1 class="text-2xl font-bold">{{ category?.name }}</h1>
+            </div>
+            <UButton icon="i-heroicons-plus" @click="showForm = !showForm">
+              新規投稿
+            </UButton>
           </div>
-          <div>
-            <h1 class="text-2xl font-bold">{{ category?.name }}</h1>
-          </div>
+
+          <PostForm
+            v-if="showForm"
+            :category-id="categoryId"
+            class="mt-4"
+            @created="onPostCreated"
+            @cancel="showForm = false"
+          />
         </div>
-        <UButton icon="i-heroicons-plus" @click="showForm = !showForm">
-          新規投稿
-        </UButton>
       </div>
 
-      <PostForm
-        v-if="showForm"
-        :category-id="categoryId"
-        class="mb-6"
-        @created="onPostCreated"
-        @cancel="showForm = false"
-      />
-
-      <SharedLoadingSpinner v-if="postsStatus === 'pending'" text="投稿を読み込み中..." />
-      <SharedErrorState v-else-if="postsError" message="投稿の取得に失敗しました。" @retry="refreshPosts()" />
-      <PostList v-else :posts="posts" />
+      <div class="flex-1 overflow-y-auto">
+        <div class="px-6 py-4 max-w-4xl mx-auto">
+          <SharedSkeletonPostList v-if="postsStatus === 'pending'" />
+          <SharedErrorState v-else-if="postsError" message="投稿の取得に失敗しました。" @retry="refreshPosts()" />
+          <PostList v-else :posts="posts" @new-post="showForm = true" />
+        </div>
+      </div>
     </template>
   </div>
 </template>

@@ -31,7 +31,7 @@ const sendResetEmail = async () => {
       </div>
       <p class="font-medium">メールを送信しました</p>
       <p class="text-sm text-muted">{{ email }} にパスワードリセットのリンクを送りました。</p>
-      <UButton variant="ghost" to="/login" class="mt-2">ログインに戻る</UButton>
+      <UButton variant="ghost" to="/login">ログインに戻る</UButton>
     </div>
   </UCard>
 
