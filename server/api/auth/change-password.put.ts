@@ -1,16 +1,17 @@
 import { changePasswordSchema } from '../../validation/schemas'
+import { badRequest, internalError, unauthorized } from '../../utils/apiErrors'
 import { requireAuth } from '../../utils/requireAuth'
 
 export default defineEventHandler(async (event) => {
   const { user, client } = await requireAuth(event)
   if (!user.email) {
-    throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
+    throw unauthorized()
   }
 
   const body = await readBody(event)
   const parsed = changePasswordSchema.safeParse(body)
   if (!parsed.success) {
-    throw createError({ statusCode: 400, statusMessage: parsed.error.message })
+    throw badRequest(parsed.error.message)
   }
 
   const { error: signInError } = await client.auth.signInWithPassword({
@@ -19,7 +20,7 @@ export default defineEventHandler(async (event) => {
   })
 
   if (signInError) {
-    throw createError({ statusCode: 400, statusMessage: '現在のパスワードが正しくありません' })
+    throw badRequest('現在のパスワードが正しくありません')
   }
 
   const { error: updateError } = await client.auth.updateUser({
@@ -27,7 +28,7 @@ export default defineEventHandler(async (event) => {
   })
 
   if (updateError) {
-    throw createError({ statusCode: 500, statusMessage: updateError.message })
+    throw internalError(updateError.message)
   }
 
   return { success: true, data: null, error: null }

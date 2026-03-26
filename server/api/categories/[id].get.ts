@@ -1,4 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
+import { notFound } from '../../utils/apiErrors'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
@@ -12,7 +13,7 @@ export default defineEventHandler(async (event) => {
     .single()
 
   if (error) {
-    throw createError({ statusCode: 404, statusMessage: 'Category not found' })
+    throw notFound('Category not found')
   }
 
   return { success: true, data, error: null }
