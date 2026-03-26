@@ -11,7 +11,7 @@ const signOut = async () => {
 </script>
 
 <template>
-  <div class="flex min-h-screen">
+  <div class="flex h-screen">
     <aside class="hidden lg:flex flex-col w-64 border-r border-default shrink-0">
       <div class="h-14 flex items-center px-5 border-b border-default">
         <NuxtLink to="/" class="text-xl font-bold tracking-tight text-primary">agora</NuxtLink>
@@ -40,7 +40,7 @@ const signOut = async () => {
             </div>
           </template>
         </ClientOnly>
-        <div class="flex items-center gap-1">
+        <div class="flex items-center gap-2">
           <UButton
             to="/settings/password"
             class="flex-1"
@@ -123,7 +123,7 @@ const signOut = async () => {
                 </div>
               </template>
             </ClientOnly>
-            <div class="flex items-center gap-1">
+            <div class="flex items-center gap-2">
               <UButton
                 to="/settings/password"
                 class="flex-1"
@@ -135,6 +135,7 @@ const signOut = async () => {
               >
                 設定
               </UButton>
+              <UColorModeButton size="xs" variant="ghost" color="neutral" />
               <UButton
                 size="xs"
                 color="neutral"

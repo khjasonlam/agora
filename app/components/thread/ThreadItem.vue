@@ -20,7 +20,7 @@ defineProps<{ thread: Thread }>()
         </UBadge>
         <span class="text-xs text-muted ml-auto shrink-0">{{ formatRelativeDate(thread.created_at) }}</span>
       </div>
-      <p class="text-sm whitespace-pre-wrap leading-relaxed">{{ thread.content }}</p>
+      <p class="text-sm whitespace-pre-wrap leading-relaxed break-words">{{ thread.content }}</p>
     </div>
   </div>
 </template>

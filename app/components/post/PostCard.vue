@@ -16,8 +16,8 @@ defineProps<{ post: Post }>()
             <span>{{ formatRelativeDate(post.created_at) }}</span>
           </div>
         </div>
-        <UBadge variant="subtle" color="neutral" size="sm" class="shrink-0">
-          <UIcon name="i-heroicons-chat-bubble-left" class="size-3.5 mr-1" />
+        <UBadge variant="subtle" color="neutral" size="sm" class="shrink-0 flex items-center gap-1">
+          <UIcon name="i-heroicons-chat-bubble-left" class="size-3.5" />
           {{ post.threads?.[0]?.count ?? 0 }}
         </UBadge>
       </div>

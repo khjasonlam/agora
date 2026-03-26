@@ -90,7 +90,7 @@ const confirmDelete = async () => {
               <td class="py-3 px-4 font-medium">{{ cat.name }}</td>
               <td class="py-3 px-4 text-muted">{{ formatRelativeDate(cat.created_at) }}</td>
               <td class="py-3 px-4">
-                <div class="flex justify-end gap-1">
+                <div class="flex items-center justify-end gap-2">
                   <UButton
                     size="xs"
                     color="neutral"
