@@ -1,33 +1,26 @@
 <script setup lang="ts">
-import type { Post, ApiResponse, Thread } from '~/types'
+import { usePostDetail } from '~/composables/usePostDetail'
 
 const route = useRoute()
 const postId = Number(route.params.id)
 
-const { data: postData, status: postStatus, error: postError, refresh: refreshPost } = await useFetch<ApiResponse<Post>>(`/api/posts/${postId}`)
-const post = computed(() => postData.value?.data ?? null)
+const {
+  post,
+  postStatus,
+  postError,
+  refreshPost,
+  threadsStatus,
+  threadsError,
+  refreshThreads,
+  newThreads,
+  realtimeStatus,
+  connectionError,
+  reconnect,
+  allThreads,
+  backLink,
+  backLabel
+} = await usePostDetail(postId)
 
-const { threads: initialThreads, status: threadsStatus, error: threadsError, refresh: refreshThreads } = useThreads(postId)
-const { newThreads, status: realtimeStatus, connectionError, reconnect } = useRealtime(postId)
-
-const allThreads = computed<Thread[]>(() => [...initialThreads.value, ...newThreads.value])
-
-const backLink = computed(() => {
-  const catId = post.value?.category_id
-  return catId ? `/categories/${catId}` : '/'
-})
-
-const backLabel = computed(() => {
-  return post.value?.categories?.name ?? 'カテゴリに戻る'
-})
-
-const activeCategoryId = useState<number | null>('activeCategoryId', () => null)
-watch(post, (p) => {
-  activeCategoryId.value = p?.category_id ?? null
-}, { immediate: true })
-onUnmounted(() => {
-  activeCategoryId.value = null
-})
 const { scrollContainer } = useThreadAutoScroll({ realtimeStatus, newThreads })
 </script>
 
