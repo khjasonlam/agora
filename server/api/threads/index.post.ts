@@ -1,10 +1,9 @@
-import { serverSupabaseClient, serverSupabaseServiceRole } from '#supabase/server'
+import { serverSupabaseServiceRole } from '#supabase/server'
 import { createThreadSchema } from '../../validation/schemas'
+import { requireAuth } from '../../utils/requireAuth'
 
 export default defineEventHandler(async (event) => {
-  const client = await serverSupabaseClient(event)
-  const { data: { user } } = await client.auth.getUser()
-  if (!user?.id) throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
+  const { user } = await requireAuth(event)
 
   const body = await readBody(event)
   const parsed = createThreadSchema.safeParse(body)
