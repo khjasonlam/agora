@@ -3,8 +3,6 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const baseURL = 'http://localhost:3000'
-
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -17,7 +15,6 @@ export default defineConfig({
   reporter: 'html',
 
   use: {
-    baseURL,
     trace: 'on-first-retry'
   },
 
@@ -37,7 +34,7 @@ export default defineConfig({
 
   webServer: {
     command: 'pnpm dev',
-    url: baseURL,
+    url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     stdout: 'ignore',
     stderr: 'pipe',
