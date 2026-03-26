@@ -1,5 +1,6 @@
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { createThreadSchema } from '../../validation/schemas'
+import { badRequest, internalError } from '../../utils/apiErrors'
 import { requireAuth } from '../../utils/requireAuth'
 
 export default defineEventHandler(async (event) => {
@@ -8,7 +9,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const parsed = createThreadSchema.safeParse(body)
   if (!parsed.success) {
-    throw createError({ statusCode: 400, statusMessage: parsed.error.message })
+    throw badRequest(parsed.error.message)
   }
 
   const supabase = serverSupabaseServiceRole(event)
@@ -16,7 +17,7 @@ export default defineEventHandler(async (event) => {
   const { data: threadNumber } = await supabase
     .rpc('next_thread_number', { p_post_id: parsed.data.post_id })
   if (threadNumber == null) {
-    throw createError({ statusCode: 500, statusMessage: 'Failed to allocate thread number' })
+    throw internalError('Failed to allocate thread number')
   }
 
   const { data, error } = await supabase
@@ -30,7 +31,7 @@ export default defineEventHandler(async (event) => {
     .single()
 
   if (error) {
-    throw createError({ statusCode: 500, statusMessage: error.message })
+    throw internalError(error.message)
   }
 
   return { success: true, data, error: null }

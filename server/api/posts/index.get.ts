@@ -1,4 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
+import { internalError } from '../../utils/apiErrors'
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
@@ -17,7 +18,7 @@ export default defineEventHandler(async (event) => {
   const { data, error } = await q
 
   if (error) {
-    throw createError({ statusCode: 500, statusMessage: error.message })
+    throw internalError(error.message)
   }
 
   return { success: true, data, error: null }

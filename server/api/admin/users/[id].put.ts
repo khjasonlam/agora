@@ -1,17 +1,18 @@
 import { updateUserSchema } from '../../../validation/schemas'
+import { badRequest, internalError } from '../../../utils/apiErrors'
 
 export default defineEventHandler(async (event) => {
   const { supabase } = await requireAdmin(event)
   const id = getRouterParam(event, 'id')
 
   if (!id) {
-    throw createError({ statusCode: 400, statusMessage: 'User ID is required' })
+    throw badRequest('User ID is required')
   }
 
   const body = await readBody(event)
   const parsed = updateUserSchema.safeParse(body)
   if (!parsed.success) {
-    throw createError({ statusCode: 400, statusMessage: parsed.error.message })
+    throw badRequest(parsed.error.message)
   }
 
   const { error } = await supabase
@@ -24,7 +25,7 @@ export default defineEventHandler(async (event) => {
     .eq('id', id)
 
   if (error) {
-    throw createError({ statusCode: 500, statusMessage: error.message })
+    throw internalError(error.message)
   }
 
   return { success: true, data: null, error: null }

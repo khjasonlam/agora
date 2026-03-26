@@ -1,9 +1,10 @@
 import { serverSupabaseClient } from '#supabase/server'
+import { badRequest, internalError } from '../../utils/apiErrors'
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
   if (!query.postId) {
-    throw createError({ statusCode: 400, statusMessage: 'postId is required' })
+    throw badRequest('postId is required')
   }
 
   const supabase = await serverSupabaseClient(event)
@@ -15,7 +16,7 @@ export default defineEventHandler(async (event) => {
     .order('thread_number')
 
   if (error) {
-    throw createError({ statusCode: 500, statusMessage: error.message })
+    throw internalError(error.message)
   }
 
   return { success: true, data, error: null }
