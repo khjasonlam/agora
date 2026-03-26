@@ -28,24 +28,7 @@ watch(post, (p) => {
 onUnmounted(() => {
   activeCategoryId.value = null
 })
-
-const scrollContainer = ref<HTMLElement | null>(null)
-
-const scrollToBottom = () => {
-  nextTick(() => {
-    if (scrollContainer.value) {
-      scrollContainer.value.scrollTop = scrollContainer.value.scrollHeight
-    }
-  })
-}
-
-watch(realtimeStatus, (status) => {
-  if (status === 'connected') scrollToBottom()
-})
-
-watch(() => newThreads.value.length, () => {
-  scrollToBottom()
-})
+const { scrollContainer } = useThreadAutoScroll({ realtimeStatus, newThreads })
 </script>
 
 <template>
