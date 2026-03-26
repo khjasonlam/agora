@@ -22,7 +22,7 @@ const {
 } = useAdminListPage<Category>({
   items: categories,
   filterBy: (category, keyword) => category.name.toLowerCase().includes(keyword),
-  deleteRequest: async (category) => $fetch(`/api/categories/${category.id}`, { method: 'DELETE' }),
+  deleteRequest: async category => $fetch(`/api/categories/${category.id}`, { method: 'DELETE' }),
   deleteSuccessMessage: 'カテゴリを削除しました',
   deleteErrorMessage: 'カテゴリの削除に失敗しました',
   onDeleted: refresh

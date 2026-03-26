@@ -23,7 +23,7 @@ const {
 } = useAdminListPage<Profile>({
   items: users,
   filterBy: (user, keyword) => user.name.toLowerCase().includes(keyword) || user.employee_id.toLowerCase().includes(keyword),
-  deleteRequest: async (user) => $fetch(`/api/admin/users/${user.id}`, { method: 'DELETE' }),
+  deleteRequest: async user => $fetch(`/api/admin/users/${user.id}`, { method: 'DELETE' }),
   deleteSuccessMessage: 'ユーザーを削除しました',
   deleteErrorMessage: 'ユーザーの削除に失敗しました',
   onDeleted: refresh
