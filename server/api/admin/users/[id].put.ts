@@ -1,13 +1,10 @@
 import { updateUserSchema } from '../../../validation/schemas'
 import { badRequest, internalError } from '../../../utils/apiErrors'
+import { parseRequiredParam } from '../../../utils/params'
 
 export default defineEventHandler(async (event) => {
   const { supabase } = await requireAdmin(event)
-  const id = getRouterParam(event, 'id')
-
-  if (!id) {
-    throw badRequest('User ID is required')
-  }
+  const id = parseRequiredParam(getRouterParam(event, 'id'), 'userId')
 
   const body = await readBody(event)
   const parsed = updateUserSchema.safeParse(body)
