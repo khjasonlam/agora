@@ -73,19 +73,25 @@ export const useAdminListPage = <T>(options: UseAdminListPageOptions<T>) => {
   }
 
   return {
-    PAGE_SIZE,
-    search,
-    page,
-    filtered,
-    paginated,
-    formOpen,
-    editTarget,
-    openCreateForm,
-    openEditForm,
-    deleteTarget,
-    deleteModalOpen,
-    deleteLoading,
-    openDeleteModal,
-    confirmDelete
+    list: {
+      pageSize: PAGE_SIZE,
+      search,
+      page,
+      filtered,
+      paginated
+    },
+    form: {
+      open: formOpen,
+      editTarget,
+      openCreate: openCreateForm,
+      openEdit: openEditForm
+    },
+    remove: {
+      target: deleteTarget,
+      modalOpen: deleteModalOpen,
+      loading: deleteLoading,
+      openModal: openDeleteModal,
+      confirm: confirmDelete
+    }
   }
 }

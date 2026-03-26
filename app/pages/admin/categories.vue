@@ -4,22 +4,7 @@ import type { Category, ApiResponse } from '~/types'
 definePageMeta({ middleware: 'admin' })
 const { data: categoriesData, status, error, refresh } = await useFetch<ApiResponse<Category[]>>('/api/categories')
 const categories = computed(() => categoriesData.value?.data ?? [])
-const {
-  PAGE_SIZE,
-  search,
-  page,
-  filtered,
-  paginated,
-  formOpen,
-  editTarget,
-  openCreateForm,
-  openEditForm,
-  deleteTarget,
-  deleteModalOpen,
-  deleteLoading,
-  openDeleteModal,
-  confirmDelete
-} = useAdminListPage<Category>({
+const { list, form, remove } = useAdminListPage<Category>({
   items: categories,
   filterBy: (category, keyword) => category.name.toLowerCase().includes(keyword),
   deleteRequest: async category => $fetch(`/api/categories/${category.id}`, { method: 'DELETE' }),
@@ -27,6 +12,10 @@ const {
   deleteErrorMessage: 'カテゴリの削除に失敗しました',
   onDeleted: refresh
 })
+
+const { pageSize: PAGE_SIZE, search, page, filtered, paginated } = list
+const { open: formOpen, editTarget, openCreate: openCreateForm, openEdit: openEditForm } = form
+const { target: deleteTarget, modalOpen: deleteModalOpen, loading: deleteLoading, openModal: openDeleteModal, confirm: confirmDelete } = remove
 </script>
 
 <template>

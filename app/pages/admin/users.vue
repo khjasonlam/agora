@@ -5,22 +5,7 @@ definePageMeta({ middleware: 'admin' })
 
 const { data: usersData, status, error, refresh } = await useFetch<ApiResponse<Profile[]>>('/api/admin/users')
 const users = computed(() => usersData.value?.data ?? [])
-const {
-  PAGE_SIZE,
-  search,
-  page,
-  filtered,
-  paginated,
-  formOpen,
-  editTarget,
-  openCreateForm,
-  openEditForm,
-  deleteTarget,
-  deleteModalOpen,
-  deleteLoading,
-  openDeleteModal,
-  confirmDelete
-} = useAdminListPage<Profile>({
+const { list, form, remove } = useAdminListPage<Profile>({
   items: users,
   filterBy: (user, keyword) => user.name.toLowerCase().includes(keyword) || user.employee_id.toLowerCase().includes(keyword),
   deleteRequest: async user => $fetch(`/api/admin/users/${user.id}`, { method: 'DELETE' }),
@@ -28,6 +13,10 @@ const {
   deleteErrorMessage: 'ユーザーの削除に失敗しました',
   onDeleted: refresh
 })
+
+const { pageSize: PAGE_SIZE, search, page, filtered, paginated } = list
+const { open: formOpen, editTarget, openCreate: openCreateForm, openEdit: openEditForm } = form
+const { target: deleteTarget, modalOpen: deleteModalOpen, loading: deleteLoading, openModal: openDeleteModal, confirm: confirmDelete } = remove
 </script>
 
 <template>
