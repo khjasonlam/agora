@@ -1,17 +1,19 @@
 import { serverSupabaseClient } from '#supabase/server'
 import { badRequest, internalError } from '../../utils/apiErrors'
+import { parseRequiredPositiveInt } from '../../utils/params'
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
   if (!query.postId) {
     throw badRequest('postId is required')
   }
+  const postId = parseRequiredPositiveInt(query.postId, 'postId')
 
   const supabase = await serverSupabaseClient(event)
   const { data, error } = await supabase
     .from('threads')
     .select('*, profiles(name)')
-    .eq('post_id', Number(query.postId))
+    .eq('post_id', postId)
     .eq('is_deleted', false)
     .order('thread_number')
 

@@ -1,9 +1,10 @@
 import { updateCategorySchema } from '../../validation/schemas'
 import { badRequest, internalError } from '../../utils/apiErrors'
+import { parseRouteId } from '../../utils/params'
 
 export default defineEventHandler(async (event) => {
   const { supabase } = await requireAdmin(event)
-  const id = getRouterParam(event, 'id')
+  const id = parseRouteId(getRouterParam(event, 'id'))
 
   const body = await readBody(event)
   const parsed = updateCategorySchema.safeParse(body)
@@ -14,7 +15,7 @@ export default defineEventHandler(async (event) => {
   const { data, error } = await supabase
     .from('categories')
     .update(parsed.data)
-    .eq('id', Number(id))
+    .eq('id', id)
     .eq('is_deleted', false)
     .select()
     .single()
