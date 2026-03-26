@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { ref } from 'vue'
+import { ref, unref } from 'vue'
 import { mockNuxtImport } from '@nuxt/test-utils/runtime'
 import type { ApiResponse, Post } from '~/types'
 
@@ -25,6 +25,8 @@ const mockPost: Post = {
 }
 
 describe('usePosts', () => {
+  const resolveUrl = (value: unknown) => String(unref(value as string))
+
   beforeEach(() => {
     vi.clearAllMocks()
     useFetchMock.mockReturnValue({
@@ -38,17 +40,28 @@ describe('usePosts', () => {
   describe('URL construction', () => {
     it('calls /api/posts when no categoryId provided', () => {
       usePosts()
-      expect(useFetchMock.mock.calls[0][0]).toBe('/api/posts')
+      expect(resolveUrl(useFetchMock.mock.calls[0][0])).toBe('/api/posts')
     })
 
     it('calls /api/posts?categoryId=X when categoryId is a number', () => {
       usePosts(5)
-      expect(useFetchMock.mock.calls[0][0]).toBe('/api/posts?categoryId=5')
+      expect(resolveUrl(useFetchMock.mock.calls[0][0])).toBe('/api/posts?categoryId=5')
     })
 
     it('calls /api/posts when categoryId is undefined', () => {
       usePosts(undefined)
-      expect(useFetchMock.mock.calls[0][0]).toBe('/api/posts')
+      expect(resolveUrl(useFetchMock.mock.calls[0][0])).toBe('/api/posts')
+    })
+
+    it('reacts to Ref categoryId changes', () => {
+      const categoryId = ref(1)
+      usePosts(categoryId)
+
+      const urlSource = useFetchMock.mock.calls[0][0]
+      expect(resolveUrl(urlSource)).toBe('/api/posts?categoryId=1')
+
+      categoryId.value = 2
+      expect(resolveUrl(urlSource)).toBe('/api/posts?categoryId=2')
     })
   })
 

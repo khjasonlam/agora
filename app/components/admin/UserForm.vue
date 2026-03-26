@@ -53,13 +53,13 @@ const submit = async () => {
           isAdmin: form.isAdmin
         }
       })
+      notify.success('ユーザーを更新しました')
     } catch {
-      loading.value = false
       notify.error('ユーザーの更新に失敗しました')
       return
+    } finally {
+      loading.value = false
     }
-    loading.value = false
-    notify.success('ユーザーを更新しました')
   } else {
     if (!form.email.trim() || !form.password) return
 
@@ -75,13 +75,13 @@ const submit = async () => {
           isAdmin: form.isAdmin
         }
       })
+      notify.success('ユーザーを作成しました')
     } catch {
-      loading.value = false
       notify.error('ユーザーの作成に失敗しました')
       return
+    } finally {
+      loading.value = false
     }
-    loading.value = false
-    notify.success('ユーザーを作成しました')
   }
 
   emit('update:open', false)
