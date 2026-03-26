@@ -1,3 +1,5 @@
+import { internalError } from '../../../utils/apiErrors'
+
 export default defineEventHandler(async (event) => {
   const { supabase } = await requireAdmin(event)
 
@@ -8,7 +10,7 @@ export default defineEventHandler(async (event) => {
     .order('name', { ascending: true })
 
   if (error) {
-    throw createError({ statusCode: 500, statusMessage: error.message })
+    throw internalError(error.message)
   }
 
   const result = (data ?? [])

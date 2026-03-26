@@ -1,4 +1,5 @@
 import { requireAuth } from '../../utils/requireAuth'
+import { internalError } from '../../utils/apiErrors'
 
 export default defineEventHandler(async (event) => {
   const { user, client } = await requireAuth(event)
@@ -10,7 +11,7 @@ export default defineEventHandler(async (event) => {
     .single()
 
   if (error) {
-    throw createError({ statusCode: 500, statusMessage: error.message })
+    throw internalError(error.message)
   }
 
   return { success: true, data, error: null }

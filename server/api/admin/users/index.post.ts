@@ -1,4 +1,5 @@
 import { createUserSchema } from '../../../validation/schemas'
+import { badRequest, internalError } from '../../../utils/apiErrors'
 
 export default defineEventHandler(async (event) => {
   const { supabase } = await requireAdmin(event)
@@ -6,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const parsed = createUserSchema.safeParse(body)
   if (!parsed.success) {
-    throw createError({ statusCode: 400, statusMessage: parsed.error.message })
+    throw badRequest(parsed.error.message)
   }
 
   const { data: authData, error: authError } = await supabase.auth.admin.createUser({
@@ -20,7 +21,7 @@ export default defineEventHandler(async (event) => {
   })
 
   if (authError) {
-    throw createError({ statusCode: 500, statusMessage: authError.message })
+    throw internalError(authError.message)
   }
 
   if (parsed.data.isAdmin && authData.user) {

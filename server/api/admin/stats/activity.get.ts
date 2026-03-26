@@ -1,3 +1,5 @@
+import { internalError } from '../../../utils/apiErrors'
+
 export default defineEventHandler(async (event) => {
   const { supabase } = await requireAdmin(event)
 
@@ -20,7 +22,7 @@ export default defineEventHandler(async (event) => {
   ])
 
   if (postsError || threadsError) {
-    throw createError({ statusCode: 500, statusMessage: postsError?.message ?? threadsError?.message })
+    throw internalError((postsError?.message ?? threadsError?.message) as string)
   }
 
   const days: { date: string, posts: number, threads: number }[] = []
