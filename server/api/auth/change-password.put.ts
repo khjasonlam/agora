@@ -1,10 +1,9 @@
-import { serverSupabaseClient } from '#supabase/server'
 import { changePasswordSchema } from '../../validation/schemas'
+import { requireAuth } from '../../utils/requireAuth'
 
 export default defineEventHandler(async (event) => {
-  const client = await serverSupabaseClient(event)
-  const { data: { user } } = await client.auth.getUser()
-  if (!user?.id || !user.email) {
+  const { user, client } = await requireAuth(event)
+  if (!user.email) {
     throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
   }
 

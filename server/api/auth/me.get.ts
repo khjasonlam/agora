@@ -1,9 +1,7 @@
-import { serverSupabaseClient } from '#supabase/server'
+import { requireAuth } from '../../utils/requireAuth'
 
 export default defineEventHandler(async (event) => {
-  const client = await serverSupabaseClient(event)
-  const { data: { user } } = await client.auth.getUser()
-  if (!user?.id) throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
+  const { user, client } = await requireAuth(event)
 
   const { data, error } = await client
     .from('profiles')
