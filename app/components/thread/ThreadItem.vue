@@ -10,12 +10,12 @@ defineProps<{ thread: Thread }>()
       <div class="flex items-center justify-center size-8 rounded-full bg-primary/10 text-primary text-xs font-bold">
         {{ thread.profiles?.name?.charAt(0) ?? '?' }}
       </div>
-      <div class="w-px flex-1 bg-default mt-2" />
+      <div class="w-px flex-1 bg-primary/20 mt-2" />
     </div>
     <div class="flex-1 pb-6 min-w-0">
       <div class="flex items-baseline gap-2 mb-1">
         <span class="text-sm font-medium">{{ thread.profiles?.name ?? '匿名' }}</span>
-        <UBadge variant="subtle" color="neutral" size="xs">
+        <UBadge variant="subtle" color="primary" size="xs">
           #{{ thread.thread_number }}
         </UBadge>
         <span class="text-xs text-muted ml-auto shrink-0">{{ formatRelativeDate(thread.created_at) }}</span>

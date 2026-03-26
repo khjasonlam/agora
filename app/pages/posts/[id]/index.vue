@@ -31,8 +31,8 @@ const scrollToBottom = () => {
   })
 }
 
-onMounted(() => {
-  scrollToBottom()
+watch(realtimeStatus, (status) => {
+  if (status === 'connected') scrollToBottom()
 })
 
 watch(() => newThreads.value.length, () => {
@@ -69,26 +69,20 @@ watch(() => newThreads.value.length, () => {
       <!-- Scrollable threads body -->
       <div ref="scrollContainer" class="flex-1 overflow-y-auto">
         <div class="px-6 py-4 max-w-3xl mx-auto">
-          <div
+          <UAlert
             v-if="connectionError"
-            class="mb-4 flex items-center justify-between gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm"
+            color="error"
+            variant="subtle"
+            icon="i-heroicons-exclamation-triangle"
+            :description="connectionError"
+            class="mb-4"
           >
-            <div class="flex items-center gap-2">
-              <UIcon name="i-heroicons-exclamation-triangle" class="size-5 text-red-500 shrink-0" />
-              <span>{{ connectionError }}</span>
-            </div>
-            <UButton size="xs" variant="outline" color="error" @click="reconnect">
-              再接続
-            </UButton>
-          </div>
-
-          <div
-            v-else-if="realtimeStatus === 'connecting'"
-            class="mb-4 flex items-center gap-2 rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-sm"
-          >
-            <UIcon name="i-heroicons-arrow-path" class="size-4 animate-spin text-yellow-500" />
-            <span>リアルタイム接続中...</span>
-          </div>
+            <template #actions>
+              <UButton size="xs" variant="outline" color="error" @click="reconnect">
+                再接続
+              </UButton>
+            </template>
+          </UAlert>
 
           <div class="flex items-center gap-2 mb-4">
             <h2 class="text-sm font-semibold text-muted uppercase tracking-wider">
@@ -99,7 +93,7 @@ watch(() => newThreads.value.length, () => {
             </UBadge>
           </div>
 
-          <SharedSkeletonThreadList v-if="threadsStatus === 'pending'" />
+          <SharedSkeletonThreadList v-if="threadsStatus === 'pending' || realtimeStatus === 'connecting'" />
           <SharedErrorState v-else-if="threadsError" message="コメントの取得に失敗しました。" @retry="refreshThreads()" />
           <ThreadList v-else :threads="allThreads" />
         </div>

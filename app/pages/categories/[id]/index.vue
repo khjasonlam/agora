@@ -55,7 +55,7 @@ const onPostCreated = async () => {
         <div class="px-6 py-4 max-w-4xl mx-auto">
           <SharedSkeletonPostList v-if="postsStatus === 'pending'" />
           <SharedErrorState v-else-if="postsError" message="投稿の取得に失敗しました。" @retry="refreshPosts()" />
-          <PostList v-else :posts="posts" />
+          <PostList v-else :posts="posts" @new-post="showForm = true" />
         </div>
       </div>
     </template>
