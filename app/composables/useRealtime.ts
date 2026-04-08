@@ -1,7 +1,7 @@
 import type { RealtimeChannel } from '@supabase/supabase-js'
 import type { Thread } from '~/types'
 
-type RealtimeStatus = 'connecting' | 'connected' | 'disconnected' | 'error'
+export type RealtimeStatus = 'connecting' | 'connected' | 'disconnected' | 'error'
 
 const MAX_RECONNECT_ATTEMPTS = 5
 const RECONNECT_BASE_DELAY_MS = 1000

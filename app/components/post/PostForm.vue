@@ -8,15 +8,18 @@ const emit = defineEmits<{
 const notify = useNotificationStore()
 const loading = ref(false)
 const title = ref('')
+const TITLE_MAX_LENGTH = 120
 
 const submit = async () => {
-  if (!title.value.trim()) return
+  if (loading.value) return
+  const normalizedTitle = title.value.trim()
+  if (!normalizedTitle) return
 
   loading.value = true
   try {
     await $fetch('/api/posts', {
       method: 'POST',
-      body: { category_id: props.categoryId, title: title.value.trim() }
+      body: { category_id: props.categoryId, title: normalizedTitle }
     })
   } catch {
     loading.value = false
@@ -38,11 +41,11 @@ const submit = async () => {
     </template>
     <UForm :state="{ title }" @submit.prevent="submit">
       <UFormField label="タイトル" name="title">
-        <UInput v-model="title" placeholder="投稿タイトルを入力..." class="w-full" />
+        <UInput v-model="title" :maxlength="TITLE_MAX_LENGTH" placeholder="投稿タイトルを入力..." class="w-full" />
       </UFormField>
       <div class="flex gap-2 justify-end mt-4">
         <UButton color="neutral" variant="ghost" @click="emit('cancel')">キャンセル</UButton>
-        <UButton type="submit" :loading="loading" :disabled="!title.trim()">投稿する</UButton>
+        <UButton type="submit" :loading="loading" :disabled="loading || !title.trim()">投稿する</UButton>
       </div>
     </UForm>
   </UCard>

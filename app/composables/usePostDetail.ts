@@ -1,7 +1,7 @@
 import type { ApiResponse, Post, Thread } from '~/types'
 
-export const usePostDetail = async (postId: number) => {
-  const { data: postData, status: postStatus, error: postError, refresh: refreshPost } = await useFetch<ApiResponse<Post>>(
+export const usePostDetail = (postId: number) => {
+  const { data: postData, status: postStatus, error: postError, refresh: refreshPost } = useFetch<ApiResponse<Post>>(
     `/api/posts/${postId}`
   )
   const post = computed(() => postData.value?.data ?? null)

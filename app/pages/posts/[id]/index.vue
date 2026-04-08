@@ -19,7 +19,7 @@ const {
   allThreads,
   backLink,
   backLabel
-} = await usePostDetail(postId)
+} = usePostDetail(postId)
 
 const { scrollContainer } = useThreadAutoScroll({ realtimeStatus, newThreads })
 </script>

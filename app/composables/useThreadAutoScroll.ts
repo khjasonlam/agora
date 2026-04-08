@@ -1,8 +1,9 @@
 import type { Thread } from '~/types'
+import type { RealtimeStatus } from '~/composables/useRealtime'
 
 export const useThreadAutoScroll = (
   args: {
-    realtimeStatus: Ref<string>
+    realtimeStatus: Ref<RealtimeStatus>
     newThreads: Ref<Thread[]>
   }
 ) => {

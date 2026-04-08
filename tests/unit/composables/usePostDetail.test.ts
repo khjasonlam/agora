@@ -106,14 +106,12 @@ describe('usePostDetail', () => {
     initialThreadsRef.value = [thread1]
     newThreadsRef.value = []
 
-    useFetchMock.mockImplementation(() =>
-      Promise.resolve({
-        data: postDataRef,
-        status: ref('success'),
-        error: ref(null),
-        refresh: vi.fn()
-      })
-    )
+    useFetchMock.mockImplementation(() => ({
+      data: postDataRef,
+      status: ref('success'),
+      error: ref(null),
+      refresh: vi.fn()
+    }))
     useThreadsMock.mockReturnValue({
       threads: initialThreadsRef,
       status: ref('success'),
@@ -157,14 +155,12 @@ describe('usePostDetail', () => {
     const initialThreadsRef = ref<Thread[]>([])
     const newThreadsRef = ref<Thread[]>([])
 
-    useFetchMock.mockImplementation(() =>
-      Promise.resolve({
-        data: postDataRef,
-        status: ref('success'),
-        error: ref(null),
-        refresh: vi.fn()
-      })
-    )
+    useFetchMock.mockImplementation(() => ({
+      data: postDataRef,
+      status: ref('success'),
+      error: ref(null),
+      refresh: vi.fn()
+    }))
     useThreadsMock.mockReturnValue({
       threads: initialThreadsRef,
       status: ref('success'),

@@ -10,10 +10,11 @@ interface UseAdminListPageOptions<T> {
   pageSize?: number
 }
 
-export const useAdminListPage = <T>(options: UseAdminListPageOptions<T>) => {
-  const notify = useNotificationStore()
-
-  const PAGE_SIZE = options.pageSize ?? 10
+const useAdminListFilterPagination = <T>(
+  items: Ref<T[]>,
+  filterBy: (item: T, search: string) => boolean,
+  pageSize: number
+) => {
   const search = ref('')
   const page = ref(1)
 
@@ -23,15 +24,19 @@ export const useAdminListPage = <T>(options: UseAdminListPageOptions<T>) => {
 
   const filtered = computed(() => {
     const keyword = search.value.toLowerCase().trim()
-    if (!keyword) return options.items.value
-    return options.items.value.filter(item => options.filterBy(item, keyword))
+    if (!keyword) return items.value
+    return items.value.filter(item => filterBy(item, keyword))
   })
 
   const paginated = computed(() => {
-    const start = (page.value - 1) * PAGE_SIZE
-    return filtered.value.slice(start, start + PAGE_SIZE)
+    const start = (page.value - 1) * pageSize
+    return filtered.value.slice(start, start + pageSize)
   })
 
+  return { search, page, filtered, paginated }
+}
+
+const useAdminListFormState = <T>() => {
   const formOpen = ref(false)
   const editTarget = ref<T | null>(null)
 
@@ -45,6 +50,18 @@ export const useAdminListPage = <T>(options: UseAdminListPageOptions<T>) => {
     formOpen.value = true
   }
 
+  return {
+    open: formOpen,
+    editTarget,
+    openCreate: openCreateForm,
+    openEdit: openEditForm
+  }
+}
+
+const useAdminListDeleteFlow = <T>(
+  options: Pick<UseAdminListPageOptions<T>, 'deleteRequest' | 'deleteSuccessMessage' | 'deleteErrorMessage' | 'onDeleted'>
+) => {
+  const notify = useNotificationStore()
   const deleteTarget = ref<T | null>(null)
   const deleteModalOpen = ref(false)
   const deleteLoading = ref(false)
@@ -68,30 +85,29 @@ export const useAdminListPage = <T>(options: UseAdminListPageOptions<T>) => {
     }
 
     deleteModalOpen.value = false
+    deleteTarget.value = null
     notify.success(options.deleteSuccessMessage)
     await options.onDeleted()
   }
 
   return {
-    list: {
-      pageSize: PAGE_SIZE,
-      search,
-      page,
-      filtered,
-      paginated
-    },
-    form: {
-      open: formOpen,
-      editTarget,
-      openCreate: openCreateForm,
-      openEdit: openEditForm
-    },
-    remove: {
-      target: deleteTarget,
-      modalOpen: deleteModalOpen,
-      loading: deleteLoading,
-      openModal: openDeleteModal,
-      confirm: confirmDelete
-    }
+    target: deleteTarget,
+    modalOpen: deleteModalOpen,
+    loading: deleteLoading,
+    openModal: openDeleteModal,
+    confirm: confirmDelete
+  }
+}
+
+export const useAdminListPage = <T>(options: UseAdminListPageOptions<T>) => {
+  const pageSize = options.pageSize ?? 10
+  const list = useAdminListFilterPagination(options.items, options.filterBy, pageSize)
+  const form = useAdminListFormState<T>()
+  const remove = useAdminListDeleteFlow(options)
+
+  return {
+    list: { pageSize, ...list },
+    form,
+    remove
   }
 }
