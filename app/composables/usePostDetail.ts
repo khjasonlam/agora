@@ -37,29 +37,21 @@ export const usePostDetail = async (postId: number) => {
   })
 
   return {
-    post: {
-      value: post,
-      status: postStatus,
-      error: postError,
-      refresh: refreshPost
-    },
-    threads: {
-      status: threadsStatus,
-      error: threadsError,
-      refresh: refreshThreads,
-      initialThreads,
-      newThreads,
-      allThreads
-    },
-    realtime: {
-      status: realtimeStatus,
-      connectionError,
-      reconnect
-    },
-    nav: {
-      backLink,
-      backLabel
-    },
+    post,
+    postStatus,
+    postError,
+    refreshPost,
+    threadsStatus,
+    threadsError,
+    refreshThreads,
+    initialThreads,
+    newThreads,
+    realtimeStatus,
+    connectionError,
+    reconnect,
+    allThreads,
+    backLink,
+    backLabel,
     postId
   }
 }
